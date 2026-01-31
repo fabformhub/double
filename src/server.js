@@ -68,14 +68,22 @@ app.use((req, res, next) => {
 });
 
 // -----------------------------
+//  MAKE userId AVAILABLE TO ALL VIEWS
+//  (must come AFTER session, BEFORE CSRF)
+// -----------------------------
+app.use((req, res, next) => {
+  res.locals.userId = req.session.userId || null;
+  next();
+});
+
+// -----------------------------
 //  CSRF PROTECTION (must come AFTER session)
 // -----------------------------
-app.use(csrf());
+app.use(csrf({ ignoreMethods: ["GET", "HEAD", "OPTIONS"] }));
 
-// Make CSRF token + user available in all views
+// Make CSRF token available in all views
 app.use((req, res, next) => {
   res.locals.csrfToken = req.csrfToken();
-  res.locals.userId = req.session.userId || null;
   next();
 });
 

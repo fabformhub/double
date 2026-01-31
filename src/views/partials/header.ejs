@@ -1,15 +1,22 @@
-<header class="bg-slate-900 border-b border-slate-800 p-4">
-  <nav class="flex gap-6 text-slate-300 max-w-4xl mx-auto">
+<header class="p-4 border-b border-slate-800 mb-6">
+  <nav class="flex items-center gap-6">
 
-    <a href="/" class="hover:text-white">Home</a>
-    <a href="/ads/new" class="hover:text-white">Create Ad</a>
-    <a href="/dashboard" class="hover:text-white">Dashboard</a>
-    <a href="/admin/review-queue" class="hover:text-white">Admin</a>
+    <!-- Logo / Home -->
+    <a href="/" class="text-xl font-semibold text-indigo-400 hover:text-indigo-300">
+      Double
+    </a>
+
+    <!-- Main navigation -->
+    <a href="/ads" class="text-slate-300 hover:text-slate-100">Browse Ads</a>
 
     <% if (userId) { %>
-      <a href="/logout" class="ml-auto hover:text-white">Logout</a>
+      <a href="/ads/new" class="text-slate-300 hover:text-slate-100">Post Ad</a>
+      <a href="/logout" class="text-slate-400 hover:text-slate-200 ml-auto">Logout</a>
     <% } else { %>
-      <a href="/login" class="ml-auto hover:text-white">Login</a>
+      <div class="ml-auto flex gap-4">
+        <a href="/login" class="text-slate-400 hover:text-slate-200">Login</a>
+        <a href="/signup" class="text-slate-400 hover:text-slate-200">Signup</a>
+      </div>
     <% } %>
 
   </nav>

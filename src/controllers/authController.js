@@ -5,11 +5,11 @@ export function showLogin(req, res) {
   res.render("auth/login", { title: "Login", error: null });
 }
 
-export function showRegister(req, res) {
-  res.render("auth/register", { title: "Register", error: null });
+export function showSignup(req, res) {
+  res.render("auth/signup", { title: "Sign Up", error: null });
 }
 
-export function register(req, res) {
+export function signup(req, res) {
   const { email, username, password } = req.body;
 
   const hash = bcrypt.hashSync(password, 10);
@@ -21,8 +21,8 @@ export function register(req, res) {
 
     res.redirect("/login");
   } catch (err) {
-    res.render("auth/register", {
-      title: "Register",
+    res.render("auth/signup", {
+      title: "Sign Up",
       error: "Email or username already exists"
     });
   }

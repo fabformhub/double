@@ -6,7 +6,10 @@ export function listAds(req, res) {
 }
 
 export function showNewAd(req, res) {
-  res.render("ads/new", { title: "Post New Ad" });
+  res.render("ads/new", {
+    title: "Post New Ad",
+    csrfToken: req.csrfToken()
+  });
 }
 
 export function createAd(req, res) {

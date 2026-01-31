@@ -4,67 +4,43 @@ CREATE TABLE IF NOT EXISTS users (
   email TEXT UNIQUE NOT NULL,
   username TEXT UNIQUE NOT NULL,
   password_hash TEXT NOT NULL,
-  role TEXT NOT NULL DEFAULT 'user', -- 'user' | 'admin'
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- ADS TABLE (with moderation workflow)
+-- ADS TABLE
 CREATE TABLE IF NOT EXISTS ads (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-
   user_id INTEGER NOT NULL,
   title TEXT NOT NULL,
   body TEXT NOT NULL,
   category TEXT,
   location TEXT,
 
-  -- Moderation state machine
-  status TEXT NOT NULL DEFAULT 'draft',
-  -- allowed values (by convention):
-  -- 'draft', 'in-review', 'needs-edit', 'rejected',
-  -- 'approved', 'scheduled', 'published',
-  -- 'archived', 'flagged', 'quarantined',
-  -- 'soft-deleted', 'escalated'
+  -- Moderation workflow
+  status TEXT NOT NULL DEFAULT 'in_review',
+  -- draft | in_review | needs_edit | published | rejected | archived
 
-  -- Admin workflow metadata
-  admin_reviewer_id INTEGER,
-  admin_notes TEXT,
-  flagged_reason TEXT,
+  -- Moderation flags
+  is_reported INTEGER NOT NULL DEFAULT 0,
+  is_featured INTEGER NOT NULL DEFAULT 0,
+  is_sensitive INTEGER NOT NULL DEFAULT 0,
+  is_shadow_hidden INTEGER NOT NULL DEFAULT 0,
+  review_priority TEXT DEFAULT 'normal',
+  -- normal | high | urgent
 
-  -- Lifecycle timestamps
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  submitted_at DATETIME,
-  reviewed_at DATETIME,
-  published_at DATETIME,
-  archived_at DATETIME,
-  scheduled_for DATETIME,
 
-  FOREIGN KEY (user_id) REFERENCES users(id),
-  FOREIGN KEY (admin_reviewer_id) REFERENCES users(id)
+  FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
--- MESSAGES TABLE (user-to-user messaging)
+-- MESSAGES TABLE
 CREATE TABLE IF NOT EXISTS messages (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  ad_id INTEGER NOT NULL,
   sender_id INTEGER NOT NULL,
   recipient_id INTEGER NOT NULL,
   body TEXT NOT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-
-  FOREIGN KEY (ad_id) REFERENCES ads(id),
   FOREIGN KEY (sender_id) REFERENCES users(id),
   FOREIGN KEY (recipient_id) REFERENCES users(id)
-);
-
--- SESSIONS TABLE (optional, if you ever want DB-backed sessions)
-CREATE TABLE IF NOT EXISTS sessions (
-  id TEXT PRIMARY KEY,
-  user_id INTEGER,
-  data TEXT,
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  expires_at DATETIME,
-
-  FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
