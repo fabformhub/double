@@ -1,0 +1,29 @@
+
+<h1 class="text-2xl font-bold mb-6">Latest Ads</h1>
+
+<div class="space-y-4">
+
+  <% if (ads.length === 0) { %>
+    <p class="text-slate-400">No ads yet.</p>
+  <% } %>
+
+  <% ads.forEach(ad => { %>
+    <div class="bg-slate-900 p-4 rounded border border-slate-800">
+      <h2 class="text-xl font-semibold mb-1">
+        <a href="/ads/<%= ad.id %>" class="text-indigo-400 hover:text-indigo-300">
+          <%= ad.title %>
+        </a>
+      </h2>
+
+      <p class="text-slate-400 mb-2">
+        <%= ad.body.substring(0, 120) %>...
+      </p>
+
+      <p class="text-slate-500 text-sm">
+        Posted on <%= new Date(ad.created_at).toLocaleDateString() %>
+      </p>
+    </div>
+  <% }) %>
+
+</div>
+

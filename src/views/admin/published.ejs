@@ -1,0 +1,28 @@
+<h1 class="text-2xl font-bold mb-6">Published Ads</h1>
+<%- include('../partials/admin-nav') %>
+
+<div class="space-y-4">
+  <% if (ads.length === 0) { %>
+    <p class="text-slate-400">No published ads.</p>
+  <% } %>
+
+  <% ads.forEach(ad => { %>
+    <div class="bg-slate-900 p-4 rounded border border-slate-800">
+      <h2 class="text-xl font-semibold mb-1"><%= ad.title %></h2>
+      <p class="text-slate-400 mb-2">By <%= ad.username %></p>
+      <p class="mb-4 whitespace-pre-line"><%= ad.body %></p>
+
+      <p class="text-slate-500 text-sm mb-4">
+        Published at <%= ad.published_at %>
+      </p>
+
+      <!-- ARCHIVE -->
+      <form action="/admin/ads/<%= ad.id %>/archive" method="POST">
+        <button class="bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded">
+          Archive
+        </button>
+      </form>
+    </div>
+  <% }) %>
+</div>
+

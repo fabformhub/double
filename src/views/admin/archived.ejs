@@ -1,0 +1,22 @@
+<h1 class="text-2xl font-bold mb-6">Archived Ads</h1>
+<%- include('../partials/admin-nav') %>
+
+<div class="space-y-4">
+  <% if (ads.length === 0) { %>
+    <p class="text-slate-400">No archived ads.</p>
+  <% } %>
+
+  <% ads.forEach(ad => { %>
+    <div class="bg-slate-900 p-4 rounded border border-slate-800">
+      <h2 class="text-xl font-semibold mb-1"><%= ad.title %></h2>
+      <p class="text-slate-400 mb-2">By <%= ad.username %></p>
+
+      <p class="mb-4 whitespace-pre-line"><%= ad.body %></p>
+
+      <p class="text-slate-500 text-sm">
+        Archived at <%= ad.archived_at %>
+      </p>
+    </div>
+  <% }) %>
+</div>
+

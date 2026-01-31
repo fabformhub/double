@@ -1,0 +1,17 @@
+<header class="bg-slate-900 border-b border-slate-800 p-4">
+  <nav class="flex gap-6 text-slate-300 max-w-4xl mx-auto">
+
+    <a href="/" class="hover:text-white">Home</a>
+    <a href="/ads/new" class="hover:text-white">Create Ad</a>
+    <a href="/dashboard" class="hover:text-white">Dashboard</a>
+    <a href="/admin/review-queue" class="hover:text-white">Admin</a>
+
+    <% if (userId) { %>
+      <a href="/logout" class="ml-auto hover:text-white">Logout</a>
+    <% } else { %>
+      <a href="/login" class="ml-auto hover:text-white">Login</a>
+    <% } %>
+
+  </nav>
+</header>
+

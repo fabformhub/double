@@ -1,0 +1,30 @@
+<%- include("../layouts/main", {
+  body: `
+  <h1 class="text-2xl font-bold mb-4">Conversation</h1>
+
+  <div class="space-y-4 mb-6">
+    ${messages.map(m => `
+      <div class="p-3 rounded ${
+        m.sender_id === userId
+          ? "bg-indigo-900/40 border border-indigo-700 ml-auto max-w-lg"
+          : "bg-slate-800 border border-slate-700 mr-auto max-w-lg"
+      }">
+        <p class="text-sm text-slate-300 mb-1">${m.sender_name}</p>
+        <p>${m.body}</p>
+        <p class="text-xs text-slate-500 mt-1">${new Date(m.created_at).toLocaleString()}</p>
+      </div>
+    `).join("")}
+  </div>
+
+  <form method="POST" class="max-w-xl">
+    <input type="hidden" name="_csrf" value="${csrfToken}">
+    <textarea name="body" rows="3" placeholder="Write a message..."
+      class="w-full px-4 py-2 rounded bg-slate-800 border border-slate-700 focus:ring-2 focus:ring-indigo-500 mb-3"></textarea>
+
+    <button class="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded font-medium">
+      Send
+    </button>
+  </form>
+  `
+}) %>
+

@@ -1,0 +1,124 @@
+<h1 class="text-2xl font-bold mb-6">Your Ads</h1>
+
+<a href="/ads/new"
+   class="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded inline-block mb-6">
+  + Create New Ad
+</a>
+
+<div class="space-y-6">
+
+  <!-- DRAFTS -->
+  <section>
+    <h2 class="text-xl font-semibold mb-2">Drafts</h2>
+    <% const drafts = ads.filter(a => a.status === 'draft'); %>
+
+    <% if (drafts.length === 0) { %>
+      <p class="text-slate-500">No drafts.</p>
+    <% } %>
+
+    <% drafts.forEach(ad => { %>
+      <div class="bg-slate-900 p-4 rounded border border-slate-800 mb-2">
+        <h3 class="text-lg font-semibold"><%= ad.title %></h3>
+        <p class="text-slate-400 mb-3"><%= ad.body %></p>
+
+        <a href="/ads/<%= ad.id %>/edit" class="text-indigo-400 hover:text-indigo-300 mr-4">
+          Edit
+        </a>
+
+        <form action="/ads/<%= ad.id %>/submit" method="POST" class="inline">
+          <button class="bg-blue-600 hover:bg-blue-500 px-3 py-1 rounded">
+            Submit for Review
+          </button>
+        </form>
+      </div>
+    <% }) %>
+  </section>
+
+  <!-- IN REVIEW -->
+  <section>
+    <h2 class="text-xl font-semibold mb-2">Submitted for Review</h2>
+    <% const inReview = ads.filter(a => a.status === 'in-review'); %>
+
+    <% if (inReview.length === 0) { %>
+      <p class="text-slate-500">No ads in review.</p>
+    <% } %>
+
+    <% inReview.forEach(ad => { %>
+      <div class="bg-slate-900 p-4 rounded border border-slate-800 mb-2">
+        <h3 class="text-lg font-semibold"><%= ad.title %></h3>
+        <p class="text-slate-400">Waiting for admin approval.</p>
+      </div>
+    <% }) %>
+  </section>
+
+  <!-- NEEDS EDIT -->
+  <section>
+    <h2 class="text-xl font-semibold mb-2">Needs Edits</h2>
+    <% const needsEdit = ads.filter(a => a.status === 'needs-edit'); %>
+
+    <% if (needsEdit.length === 0) { %>
+      <p class="text-slate-500">No ads needing edits.</p>
+    <% } %>
+
+    <% needsEdit.forEach(ad => { %>
+      <div class="bg-slate-900 p-4 rounded border border-slate-800 mb-2">
+        <h3 class="text-lg font-semibold"><%= ad.title %></h3>
+
+        <p class="text-yellow-400 mb-2">
+          Admin notes: <%= ad.admin_notes %>
+        </p>
+
+        <a href="/ads/<%= ad.id %>/edit" class="text-indigo-400 hover:text-indigo-300 mr-4">
+          Edit & Resubmit
+        </a>
+      </div>
+    <% }) %>
+  </section>
+
+  <!-- REJECTED -->
+  <section>
+    <h2 class="text-xl font-semibold mb-2">Rejected</h2>
+    <% const rejected = ads.filter(a => a.status === 'rejected'); %>
+
+    <% if (rejected.length === 0) { %>
+      <p class="text-slate-500">No rejected ads.</p>
+    <% } %>
+
+    <% rejected.forEach(ad => { %>
+      <div class="bg-slate-900 p-4 rounded border border-slate-800 mb-2">
+        <h3 class="text-lg font-semibold"><%= ad.title %></h3>
+
+        <p class="text-red-400 mb-2">
+          Reason: <%= ad.admin_notes %>
+        </p>
+
+        <a href="/ads/<%= ad.id %>/edit" class="text-indigo-400 hover:text-indigo-300 mr-4">
+          Fix & Resubmit
+        </a>
+      </div>
+    <% }) %>
+  </section>
+
+  <!-- PUBLISHED -->
+  <section>
+    <h2 class="text-xl font-semibold mb-2">Published</h2>
+    <% const published = ads.filter(a => a.status === 'published'); %>
+
+    <% if (published.length === 0) { %>
+      <p class="text-slate-500">No published ads.</p>
+    <% } %>
+
+    <% published.forEach(ad => { %>
+      <div class="bg-slate-900 p-4 rounded border border-slate-800 mb-2">
+        <h3 class="text-lg font-semibold"><%= ad.title %></h3>
+        <p class="text-slate-400 mb-2">Live on the site</p>
+
+        <a href="/ads/<%= ad.id %>" class="text-indigo-400 hover:text-indigo-300">
+          View
+        </a>
+      </div>
+    <% }) %>
+  </section>
+
+</div>
+

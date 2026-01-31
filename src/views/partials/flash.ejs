@@ -1,0 +1,10 @@
+<% if (messages && messages.length > 0) { %>
+  <div class="space-y-2">
+    <% messages.forEach(msg => { %>
+      <div class="bg-slate-800 border border-slate-700 p-3 rounded text-slate-200">
+        <%= msg %>
+      </div>
+    <% }) %>
+  </div>
+<% } %>
+

@@ -1,0 +1,50 @@
+<h1 class="text-2xl font-bold mb-6">Flagged Ads</h1>
+<%- include('../partials/admin-nav') %>
+
+<div class="space-y-4">
+  <% if (ads.length === 0) { %>
+    <p class="text-slate-400">No flagged ads.</p>
+  <% } %>
+
+  <% ads.forEach(ad => { %>
+    <div class="bg-slate-900 p-4 rounded border border-slate-800">
+      <h2 class="text-xl font-semibold mb-1"><%= ad.title %></h2>
+      <p class="text-slate-400 mb-2">By <%= ad.username %></p>
+
+      <p class="mb-4 whitespace-pre-line"><%= ad.body %></p>
+
+      <% if (ad.flagged_reason) { %>
+        <p class="text-red-400 text-sm mb-4">
+          Flag reason: <%= ad.flagged_reason %>
+        </p>
+      <% } %>
+
+      <div class="flex gap-2">
+
+        <!-- APPROVE (clear flag) -->
+        <form action="/admin/ads/<%= ad.id %>/approve" method="POST">
+          <button class="bg-green-600 hover:bg-green-500 px-3 py-1 rounded">
+            Approve
+          </button>
+        </form>
+
+        <!-- REJECT -->
+        <form action="/admin/ads/<%= ad.id %>/reject" method="POST">
+          <input type="hidden" name="notes" value="Rejected after flag review">
+          <button class="bg-red-600 hover:bg-red-500 px-3 py-1 rounded">
+            Reject
+          </button>
+        </form>
+
+        <!-- ARCHIVE -->
+        <form action="/admin/ads/<%= ad.id %>/archive" method="POST">
+          <button class="bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded">
+            Archive
+          </button>
+        </form>
+
+      </div>
+    </div>
+  <% }) %>
+</div>
+

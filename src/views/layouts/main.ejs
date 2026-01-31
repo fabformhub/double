@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-950 text-slate-200">
+<head>
+  <meta charset="UTF-8">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body class="min-h-screen flex flex-col">
+
+  <%- include("../partials/header") %>
+
+  <div class="max-w-4xl mx-auto w-full p-4">
+    <%- include("../partials/flash") %>
+  </div>
+
+  <% if (typeof showAdminNav !== "undefined" && showAdminNav) { %>
+  <div class="max-w-4xl mx-auto w-full p-4">
+    <%- include("../partials/admin-nav") %>
+  </div>
+<% } %>
+
+
+  <main class="max-w-4xl mx-auto w-full p-6">
+    <%- body %>
+  </main>
+
+  <%- include("../partials/footer") %>
+
+</body>
+</html>
+
