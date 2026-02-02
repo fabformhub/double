@@ -7,11 +7,13 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Load schema.sql
+// Absolute path to schema.sql
 const schemaPath = path.join(__dirname, "schema.sql");
+
+// Read schema file
 const schema = fs.readFileSync(schemaPath, "utf8");
 
-// Execute schema
+// Execute schema on the correct database
 db.exec(schema);
 
 console.log("Database initialized successfully.");

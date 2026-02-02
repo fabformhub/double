@@ -1,10 +1,12 @@
 import express from "express";
 import db from "../config/db.js";
-import {
-  submitForReview
-} from "../controllers/adsModerationController.js";
+import { listAds } from "../controllers/adsController.js";
+import { submitForReview } from "../controllers/adsModerationController.js";
 
 const router = express.Router();
+
+// LIST ALL ADS  ← THIS WAS MISSING
+router.get("/", listAds);
 
 // Require login
 function requireLogin(req, res, next) {
@@ -61,7 +63,6 @@ router.post("/:id/edit", requireLogin, (req, res) => {
 
 // SUBMIT FOR REVIEW
 router.post("/:id/submit", requireLogin, submitForReview);
-
 
 // VIEW A SINGLE AD
 router.get("/:id", (req, res) => {

@@ -1,6 +1,7 @@
 <h1 class="text-2xl font-bold mb-6">Edit Ad</h1>
 
 <form action="/ads/<%= ad.id %>/edit" method="POST" class="space-y-4">
+<input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
   <div>
     <label class="block mb-1">Title</label>

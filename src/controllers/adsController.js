@@ -2,6 +2,7 @@ import db from "../config/db.js";
 
 export function listAds(req, res) {
   const ads = db.prepare("SELECT * FROM ads ORDER BY created_at DESC").all();
+  console.log("ADS FROM DB:", ads);
   res.render("ads/index", { title: "Ads", ads });
 }
 

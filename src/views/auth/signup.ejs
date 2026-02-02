@@ -7,6 +7,7 @@
 <% } %>
 
 <form action="/signup" method="POST" class="grid gap-4 max-w-md">
+<input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
   <div>
     <label class="block mb-1 text-slate-300">Email</label>
