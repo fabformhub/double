@@ -10,13 +10,21 @@
     <a href="/ads" class="text-slate-300 hover:text-slate-100">Browse Ads</a>
 
     <% if (userId) { %>
+      <a href="/dashboard" class="text-slate-300 hover:text-slate-100">Dashboard</a>
       <a href="/ads/new" class="text-slate-300 hover:text-slate-100">Post Ad</a>
-      <a href="/logout" class="text-slate-400 hover:text-slate-200 ml-auto">Logout</a>
+
+      <!-- Push right -->
+      <span class="ml-auto text-slate-400 text-sm"><%= userEmail %></span>
+      <a href="/logout" class="text-slate-400 hover:text-slate-200">Logout</a>
+
     <% } else { %>
+
+      <!-- Push right -->
       <div class="ml-auto flex gap-4">
         <a href="/login" class="text-slate-400 hover:text-slate-200">Login</a>
         <a href="/signup" class="text-slate-400 hover:text-slate-200">Signup</a>
       </div>
+
     <% } %>
 
   </nav>

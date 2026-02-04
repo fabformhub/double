@@ -2,30 +2,47 @@ import bcrypt from "bcrypt";
 import db from "../config/db.js";
 
 export function showLogin(req, res) {
-  res.render("auth/login", { title: "Login", error: null });
+  res.render("auth/login", {
+    title: "Login",
+    csrfToken: req.csrfToken(),
+    error: null
+  });
 }
 
 export function showSignup(req, res) {
-  res.render("auth/signup", { title: "Sign Up", error: null });
+  res.render("auth/signup", {
+    title: "Sign Up",
+    csrfToken: req.csrfToken(),
+    error: null
+  });
 }
 
 export function signup(req, res) {
-  const { email, username, password } = req.body;
+  const { email, password, confirmPassword } = req.body;
+
+  if (password !== confirmPassword) {
+    return res.render("auth/signup", {
+      title: "Sign Up",
+      csrfToken: req.csrfToken(),
+      error: "Passwords do not match"
+    });
+  }
+
+  const existing = db.prepare("SELECT id FROM users WHERE email = ?").get(email);
+  if (existing) {
+    return res.render("auth/signup", {
+      title: "Sign Up",
+      csrfToken: req.csrfToken(),
+      error: "Email already registered"
+    });
+  }
 
   const hash = bcrypt.hashSync(password, 10);
 
-  try {
-    db.prepare(
-      "INSERT INTO users (email, username, password_hash) VALUES (?, ?, ?)"
-    ).run(email, username, hash);
+  db.prepare("INSERT INTO users (email, password) VALUES (?, ?)").run(email, hash);
 
-    res.redirect("/login");
-  } catch (err) {
-    res.render("auth/signup", {
-      title: "Sign Up",
-      error: "Email or username already exists"
-    });
-  }
+  req.flash("Account created successfully! You can now log in.");
+  res.redirect("/login");
 }
 
 export function login(req, res) {
@@ -33,19 +50,32 @@ export function login(req, res) {
 
   const user = db.prepare("SELECT * FROM users WHERE email = ?").get(email);
 
-  if (!user || !bcrypt.compareSync(password, user.password_hash)) {
+  if (!user) {
     return res.render("auth/login", {
       title: "Login",
-      error: "Invalid credentials"
+      csrfToken: req.csrfToken(),
+      error: "Invalid email or password"
+    });
+  }
+
+  const valid = bcrypt.compareSync(password, user.password);
+
+  if (!valid) {
+    return res.render("auth/login", {
+      title: "Login",
+      csrfToken: req.csrfToken(),
+      error: "Invalid email or password"
     });
   }
 
   req.session.userId = user.id;
-  res.redirect("/ads");
+  req.flash("Welcome back!");
+  res.redirect("/dashboard");
 }
 
 export function logout(req, res) {
   req.session.destroy(() => {
+    req.flash("You have been logged out.");
     res.redirect("/login");
   });
 }

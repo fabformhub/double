@@ -15,23 +15,6 @@ const SQLiteStore = SQLiteStoreFactory(session);
 const app = express();
 
 // -----------------------------
-//  ROUTES (imported first, mounted later)
-// -----------------------------
-import dashboardRoutes from "./routes/dashboard.js";
-import adsRoutes from "./routes/ads.js";
-import authRoutes from "./routes/auth.js";
-import messagesRoutes from "./routes/messages.js";
-import adminRoutes from "./routes/admin.js";
-
-// -----------------------------
-//  VIEW ENGINE (EJS)
-// -----------------------------
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
-app.use(expressLayouts);
-app.set("layout", "layouts/main");
-
-// -----------------------------
 //  STATIC FILES
 // -----------------------------
 app.use(express.static(path.join(__dirname, "public")));
@@ -60,16 +43,27 @@ app.use(
 );
 
 // -----------------------------
-//  FLASH MESSAGES (must come AFTER session)
+//  FLASH HELPER (req.flash())
+// -----------------------------
+app.use((req, res, next) => {
+  req.flash = function (msg) {
+    if (!req.session.messages) req.session.messages = [];
+    req.session.messages.push(msg);
+  };
+  next();
+});
+
+// -----------------------------
+//  FLASH MESSAGES (expose + clear)
 // -----------------------------
 app.use((req, res, next) => {
   res.locals.messages = req.session.messages || [];
+  req.session.messages = []; // clear after showing
   next();
 });
 
 // -----------------------------
 //  MAKE userId AVAILABLE TO ALL VIEWS
-//  (must come AFTER session, BEFORE CSRF)
 // -----------------------------
 app.use((req, res, next) => {
   res.locals.userId = req.session.userId || null;
@@ -77,7 +71,23 @@ app.use((req, res, next) => {
 });
 
 // -----------------------------
-//  CSRF PROTECTION (must come AFTER session)
+//  MAKE userEmail AVAILABLE TO ALL VIEWS
+// -----------------------------
+app.use((req, res, next) => {
+  if (req.session.userId) {
+    const user = db
+      .prepare("SELECT email FROM users WHERE id = ?")
+      .get(req.session.userId);
+
+    res.locals.userEmail = user?.email || null;
+  } else {
+    res.locals.userEmail = null;
+  }
+  next();
+});
+
+// -----------------------------
+//  CSRF PROTECTION
 // -----------------------------
 app.use(csrf({ ignoreMethods: ["GET", "HEAD", "OPTIONS"] }));
 
@@ -88,8 +98,22 @@ app.use((req, res, next) => {
 });
 
 // -----------------------------
-//  ROUTES (MUST COME AFTER MIDDLEWARE)
+//  VIEW ENGINE (EJS)
 // -----------------------------
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+app.use(expressLayouts);
+app.set("layout", "layouts/main");
+
+// -----------------------------
+//  ROUTES
+// -----------------------------
+import dashboardRoutes from "./routes/dashboard.js";
+import adsRoutes from "./routes/ads.js";
+import authRoutes from "./routes/auth.js";
+import messagesRoutes from "./routes/messages.js";
+import adminRoutes from "./routes/admin.js";
+
 app.use("/", authRoutes);
 app.use("/ads", adsRoutes);
 app.use("/messages", messagesRoutes);

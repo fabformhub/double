@@ -1,49 +1,27 @@
-<h1 class="text-3xl font-bold mb-6">Create Your Account</h1>
+<div class="max-w-md mx-auto bg-slate-900 p-6 rounded-xl border border-slate-800">
+  <h1 class="text-xl font-semibold mb-4">Create Account</h1>
 
-<% if (error) { %>
-  <div class="mb-4 p-3 bg-red-900 text-red-200 rounded">
-    <%= error %>
-  </div>
-<% } %>
+  <% if (error) { %>
+    <div class="bg-red-900/40 border border-red-700 text-red-300 p-3 rounded mb-4">
+      <%= error %>
+    </div>
+  <% } %>
 
-<form action="/signup" method="POST" class="grid gap-4 max-w-md">
-<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+  <form method="POST">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
-  <div>
-    <label class="block mb-1 text-slate-300">Email</label>
-    <input 
-      type="email" 
-      name="email" 
-      required
-      class="w-full p-2 rounded bg-slate-900 border border-slate-700 text-slate-100"
-    >
-  </div>
+    <input name="email" type="email" placeholder="Email"
+      class="w-full mb-3 px-4 py-2 rounded bg-slate-800 border border-slate-700" required>
 
-  <div>
-    <label class="block mb-1 text-slate-300">Username</label>
-    <input 
-      type="text" 
-      name="username" 
-      required
-      class="w-full p-2 rounded bg-slate-900 border border-slate-700 text-slate-100"
-    >
-  </div>
+    <input name="password" type="password" placeholder="Password"
+      class="w-full mb-3 px-4 py-2 rounded bg-slate-800 border border-slate-700" required>
 
-  <div>
-    <label class="block mb-1 text-slate-300">Password</label>
-    <input 
-      type="password" 
-      name="password" 
-      required
-      class="w-full p-2 rounded bg-slate-900 border border-slate-700 text-slate-100"
-    >
-  </div>
+    <input name="confirmPassword" type="password" placeholder="Confirm Password"
+      class="w-full mb-3 px-4 py-2 rounded bg-slate-800 border border-slate-700" required>
 
-  <button 
-    class="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded text-white font-medium"
-  >
-    Sign Up
-  </button>
-
-</form>
+    <button class="w-full bg-indigo-600 hover:bg-indigo-500 py-2 rounded font-medium">
+      Sign Up
+    </button>
+  </form>
+</div>
 
