@@ -1,24 +1,16 @@
+<%- include("../partials/header", { title }) %>
 
-<div class="max-w-2xl mx-auto bg-slate-900 p-6 rounded-xl border border-slate-800">
-  <h1 class="text-3xl font-bold mb-2"><%= ad.title %></h1>
+<h1><%= ad.title %></h1>
 
-  <p class="text-slate-400 mb-4">
-    <%= ad.category %> — <%= ad.location %>
-  </p>
+<p><%= ad.body %></p>
 
-  <div class="prose prose-invert mb-6">
-    <p><%- ad.body.replace(/\n/g, "<br>") %></p>
-  </div>
+<p class="meta">
+  Posted in <%= location.city_name %> by <%= ad.username %>
+</p>
 
-  <% if (userId) { %>
-    <a href="/messages/<%= ad.user_id %>"
-      class="inline-block bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded font-medium">
-      Message Poster
-    </a>
-  <% } else { %>
-    <p class="text-slate-400">
-      You must <a href="/login" class="text-indigo-400">log in</a> to contact the poster.
-    </p>
-  <% } %>
-</div>
+<a href="/<%= location.country_code %>/<%= location.slug %>/ads">
+  Back to <%= location.city_name %> ads
+</a>
+
+<%- include("../partials/footer") %>
 

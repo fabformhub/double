@@ -7,14 +7,23 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Absolute path to schema.sql
+// Load schema.sql
 const schemaPath = path.join(__dirname, "schema.sql");
-
-// Read schema file
 const schema = fs.readFileSync(schemaPath, "utf8");
 
-// Execute schema on the correct database
+// Execute schema
 db.exec(schema);
+console.log("Tables created successfully.");
 
-console.log("Database initialized successfully.");
+// Load seed_locations.sql
+const seedPath = path.join(__dirname, "seed_locations.sql");
+if (fs.existsSync(seedPath)) {
+  const seedSQL = fs.readFileSync(seedPath, "utf8");
+  db.exec(seedSQL);
+  console.log("Locations seeded successfully.");
+} else {
+  console.warn("seed_locations.sql not found — skipping seeding.");
+}
+
+console.log("Database initialized and seeded.");
 

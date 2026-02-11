@@ -1,0 +1,50 @@
+<%- include("partials/header", { title }) %>
+
+<div class="max-w-3xl mx-auto py-16 px-6">
+
+  <h1 class="text-4xl font-semibold text-center mb-12 tracking-tight">
+    Select Your City
+  </h1>
+
+  <!-- UNITED KINGDOM -->
+  <section class="mb-14">
+    <h2 class="text-lg font-semibold text-gray-600 mb-4 flex items-center gap-2">
+      <span>🇬🇧</span> United Kingdom
+    </h2>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-y-3">
+      <% locations.uk.forEach(loc => { %>
+        <a 
+          href="/<%= loc.country_code %>/<%= loc.slug %>/ads"
+          class="flex items-center gap-2 text-lg text-gray-800 hover:text-black transition"
+        >
+          <span>📍</span> <%= loc.city_name %>
+        </a>
+      <% }) %>
+    </div>
+  </section>
+
+  <hr class="my-10 border-gray-200">
+
+  <!-- IRELAND -->
+  <section>
+    <h2 class="text-lg font-semibold text-gray-600 mb-4 flex items-center gap-2">
+      <span>🇮🇪</span> Ireland
+    </h2>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-y-3">
+      <% locations.ie.forEach(loc => { %>
+        <a 
+          href="/<%= loc.country_code %>/<%= loc.slug %>/ads"
+          class="flex items-center gap-2 text-lg text-gray-800 hover:text-black transition"
+        >
+          <span>📍</span> <%= loc.city_name %>
+        </a>
+      <% }) %>
+    </div>
+  </section>
+
+</div>
+
+<%- include("partials/footer") %>
+

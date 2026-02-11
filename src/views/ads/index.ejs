@@ -1,29 +1,29 @@
+<%- include("../partials/header", { title }) %>
 
-<h1 class="text-2xl font-bold mb-6">Latest Ads</h1>
+<h1 class="page-title">Ads in <%= location.city_name %></h1>
 
-<div class="space-y-4">
-
+<div class="ads-list">
   <% if (ads.length === 0) { %>
-    <p class="text-slate-400">No ads yet.</p>
+    <p>No ads posted in this location yet.</p>
+  <% } else { %>
+    <% ads.forEach(ad => { %>
+      <div class="ad-card">
+        <h2>
+          <a href="/<%= location.country_code %>/<%= location.slug %>/ads/<%= ad.id %>">
+            <%= ad.title %>
+          </a>
+        </h2>
+        <p><%= ad.body.substring(0, 120) %>...</p>
+        <small>Posted by <%= ad.username %></small>
+      </div>
+    <% }) %>
   <% } %>
-
-  <% ads.forEach(ad => { %>
-    <div class="bg-slate-900 p-4 rounded border border-slate-800">
-      <h2 class="text-xl font-semibold mb-1">
-        <a href="/ads/<%= ad.id %>" class="text-indigo-400 hover:text-indigo-300">
-          <%= ad.title %>
-        </a>
-      </h2>
-
-      <p class="text-slate-400 mb-2">
-        <%= ad.body.substring(0, 120) %>...
-      </p>
-
-      <p class="text-slate-500 text-sm">
-        Posted on <%= new Date(ad.created_at).toLocaleDateString() %>
-      </p>
-    </div>
-  <% }) %>
-
 </div>
+
+<a class="btn btn-primary"
+   href="/<%= location.country_code %>/<%= location.slug %>/ads/new">
+  Post New Ad
+</a>
+
+<%- include("../partials/footer") %>
 

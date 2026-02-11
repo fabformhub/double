@@ -108,14 +108,17 @@ app.set("layout", "layouts/main");
 // -----------------------------
 //  ROUTES
 // -----------------------------
-import dashboardRoutes from "./routes/dashboard.js";
-import adsRoutes from "./routes/ads.js";
+//
 import authRoutes from "./routes/auth.js";
+import dashboardRoutes from "./routes/dashboard.js";
 import messagesRoutes from "./routes/messages.js";
 import adminRoutes from "./routes/admin.js";
+import homeRouter from "./routes/home.js";
+import adsRoutes from "./routes/ads.js";
 
 app.use("/", authRoutes);
-app.use("/ads", adsRoutes);
+app.use("/", homeRouter);
+app.use("/", adsRoutes);
 app.use("/messages", messagesRoutes);
 app.use("/admin", adminRoutes);
 app.use("/dashboard", dashboardRoutes);
