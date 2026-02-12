@@ -1,44 +1,69 @@
-<h1 class="text-2xl font-bold mb-6">Review Queue</h1>
-<%- include('../partials/admin-nav') %>
+<div class="max-w-6xl mx-auto py-16 px-6">
 
-<div class="space-y-4">
-  <% if (ads.length === 0) { %>
-    <p class="text-slate-400">No ads waiting for review.</p>
+  <h1 class="text-4xl font-semibold mb-10 tracking-tight">
+    Review queue
+  </h1>
+
+  <p class="text-lg text-gray-600 mb-8">
+    Ads awaiting moderation before going live.
+  </p>
+
+  <% if (!ads || ads.length === 0) { %>
+    <p class="text-gray-600 text-lg">No ads in the review queue.</p>
+  <% } else { %>
+    <div class="flex flex-col gap-6">
+      <% ads.forEach(ad => { %>
+        <div class="p-5 rounded-2xl border border-gray-200">
+          <div class="flex justify-between items-start gap-4 mb-3">
+            <div>
+              <h2 class="text-2xl font-semibold mb-1">
+                <a href="/admin/ad/<%= ad.id %>" class="hover:underline">
+                  <%= ad.title %>
+                </a>
+              </h2>
+              <p class="text-sm text-gray-500">
+                <%= ad.city_name %> · <%= ad.category_name %>
+                <% if (ad.subcategory_name) { %> / <%= ad.subcategory_name %><% } %>
+                · by <%= ad.username %>
+              </p>
+            </div>
+            <p class="text-xs text-gray-500">
+              <%= ad.created_at %>
+            </p>
+          </div>
+
+          <p class="text-gray-800 line-clamp-3 mb-4"><%= ad.body %></p>
+
+          <div class="flex gap-4">
+            <form method="POST" action="/admin/ad/<%= ad.id %>/approve">
+              <button
+                type="submit"
+                class="px-4 py-2 rounded-lg bg-green-600 text-white text-sm hover:bg-green-700 transition"
+              >
+                Approve
+              </button>
+            </form>
+
+            <form method="POST" action="/admin/ad/<%= ad.id %>/reject">
+              <button
+                type="submit"
+                class="px-4 py-2 rounded-lg bg-red-600 text-white text-sm hover:bg-red-700 transition"
+              >
+                Reject
+              </button>
+            </form>
+
+            <a
+              href="/admin/ad/<%= ad.id %>"
+              class="px-4 py-2 rounded-lg bg-gray-100 text-gray-800 text-sm hover:bg-gray-200 transition"
+            >
+              View details
+            </a>
+          </div>
+        </div>
+      <% }) %>
+    </div>
   <% } %>
 
-  <% ads.forEach(ad => { %>
-    <div class="bg-slate-900 p-4 rounded border border-slate-800">
-      <h2 class="text-xl font-semibold mb-1"><%= ad.title %></h2>
-      <p class="text-slate-400 mb-2">By <%= ad.username %></p>
-      <p class="mb-4 whitespace-pre-line"><%= ad.body %></p>
-
-      <div class="flex gap-2">
-
-        <!-- APPROVE -->
-        <form action="/admin/ads/<%= ad.id %>/approve" method="POST">
-          <button class="bg-green-600 hover:bg-green-500 px-3 py-1 rounded">
-            Approve
-          </button>
-        </form>
-
-        <!-- REJECT -->
-        <form action="/admin/ads/<%= ad.id %>/reject" method="POST">
-          <input type="hidden" name="notes" value="Rejected by admin">
-          <button class="bg-red-600 hover:bg-red-500 px-3 py-1 rounded">
-            Reject
-          </button>
-        </form>
-
-        <!-- REQUEST EDITS -->
-        <form action="/admin/ads/<%= ad.id %>/request-edits" method="POST">
-          <input type="hidden" name="notes" value="Please edit and resubmit">
-          <button class="bg-yellow-600 hover:bg-yellow-500 px-3 py-1 rounded">
-            Request Edits
-          </button>
-        </form>
-
-      </div>
-    </div>
-  <% }) %>
 </div>
 

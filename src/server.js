@@ -15,18 +15,18 @@ const SQLiteStore = SQLiteStoreFactory(session);
 const app = express();
 
 // -----------------------------
-//  STATIC FILES
+// STATIC FILES
 // -----------------------------
 app.use(express.static(path.join(__dirname, "public")));
 
 // -----------------------------
-//  BODY PARSERS
+// BODY PARSERS
 // -----------------------------
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // -----------------------------
-//  SESSION SETUP
+// SESSION SETUP
 // -----------------------------
 app.use(
   session({
@@ -43,7 +43,7 @@ app.use(
 );
 
 // -----------------------------
-//  FLASH HELPER (req.flash())
+// FLASH HELPER
 // -----------------------------
 app.use((req, res, next) => {
   req.flash = function (msg) {
@@ -53,52 +53,43 @@ app.use((req, res, next) => {
   next();
 });
 
-// -----------------------------
-//  FLASH MESSAGES (expose + clear)
-// -----------------------------
+// Expose + clear flash messages
 app.use((req, res, next) => {
   res.locals.messages = req.session.messages || [];
-  req.session.messages = []; // clear after showing
+  req.session.messages = [];
   next();
 });
 
 // -----------------------------
-//  MAKE userId AVAILABLE TO ALL VIEWS
+// USER INFO IN VIEWS
 // -----------------------------
 app.use((req, res, next) => {
   res.locals.userId = req.session.userId || null;
-  next();
-});
 
-// -----------------------------
-//  MAKE userEmail AVAILABLE TO ALL VIEWS
-// -----------------------------
-app.use((req, res, next) => {
   if (req.session.userId) {
     const user = db
       .prepare("SELECT email FROM users WHERE id = ?")
       .get(req.session.userId);
-
     res.locals.userEmail = user?.email || null;
   } else {
     res.locals.userEmail = null;
   }
+
   next();
 });
 
 // -----------------------------
-//  CSRF PROTECTION
+// CSRF PROTECTION
 // -----------------------------
 app.use(csrf({ ignoreMethods: ["GET", "HEAD", "OPTIONS"] }));
 
-// Make CSRF token available in all views
 app.use((req, res, next) => {
   res.locals.csrfToken = req.csrfToken();
   next();
 });
 
 // -----------------------------
-//  VIEW ENGINE (EJS)
+// VIEW ENGINE
 // -----------------------------
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -106,33 +97,48 @@ app.use(expressLayouts);
 app.set("layout", "layouts/main");
 
 // -----------------------------
-//  ROUTES
+// ROUTES (ORDER MATTERS!)
 // -----------------------------
-//
+
 import authRoutes from "./routes/auth.js";
 import dashboardRoutes from "./routes/dashboard.js";
 import messagesRoutes from "./routes/messages.js";
 import adminRoutes from "./routes/admin.js";
 import homeRouter from "./routes/home.js";
 import adsRoutes from "./routes/ads.js";
+import locationRoutes from "./routes/locations.js";   // <-- YOU WERE MISSING THIS
 
+// AUTH FIRST
 app.use("/", authRoutes);
+
+// HOME ROUTER (city list)
 app.use("/", homeRouter);
+
+// LOCATION + CATEGORY ROUTES
+// MUST COME BEFORE ADS ROUTES
+app.use("/", locationRoutes);
+
+// ADS ROUTES
 app.use("/", adsRoutes);
+
+// MESSAGES
 app.use("/messages", messagesRoutes);
+
+// ADMIN
 app.use("/admin", adminRoutes);
+
+// DASHBOARD
 app.use("/dashboard", dashboardRoutes);
 
 // -----------------------------
-//  HOME PAGE
+// 404 HANDLER
 // -----------------------------
-app.get("/", (req, res) => {
-  const ads = db.prepare("SELECT * FROM ads ORDER BY created_at DESC").all();
-  res.render("ads/index", { title: "Home", ads });
+app.use((req, res) => {
+  res.status(404).render("404", { title: "Not found" });
 });
 
 // -----------------------------
-//  ERROR HANDLING
+// ERROR HANDLER
 // -----------------------------
 app.use((err, req, res, next) => {
   if (err.code === "EBADCSRFTOKEN") {
@@ -143,7 +149,7 @@ app.use((err, req, res, next) => {
 });
 
 // -----------------------------
-//  START SERVER
+// START SERVER
 // -----------------------------
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

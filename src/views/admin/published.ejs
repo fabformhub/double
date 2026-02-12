@@ -1,28 +1,69 @@
-<h1 class="text-2xl font-bold mb-6">Published Ads</h1>
-<%- include('../partials/admin-nav') %>
+<div class="max-w-6xl mx-auto py-16 px-6">
 
-<div class="space-y-4">
-  <% if (ads.length === 0) { %>
-    <p class="text-slate-400">No published ads.</p>
+  <h1 class="text-4xl font-semibold mb-10 tracking-tight">
+    Published ads
+  </h1>
+
+  <p class="text-lg text-gray-600 mb-8">
+    All ads currently live on the site.
+  </p>
+
+  <% if (!ads || ads.length === 0) { %>
+    <p class="text-gray-600 text-lg">No published ads.</p>
+  <% } else { %>
+    <div class="flex flex-col gap-6">
+      <% ads.forEach(ad => { %>
+        <div class="p-5 rounded-2xl border border-gray-200">
+          <div class="flex justify-between items-start gap-4 mb-3">
+            <div>
+              <h2 class="text-2xl font-semibold mb-1">
+                <a href="/admin/ad/<%= ad.id %>" class="hover:underline">
+                  <%= ad.title %>
+                </a>
+              </h2>
+              <p class="text-sm text-gray-500">
+                <%= ad.city_name %> · <%= ad.category_name %>
+                <% if (ad.subcategory_name) { %> / <%= ad.subcategory_name %><% } %>
+                · by <%= ad.username %>
+              </p>
+            </div>
+            <p class="text-xs text-gray-500">
+              <%= ad.created_at %>
+            </p>
+          </div>
+
+          <p class="text-gray-800 line-clamp-3 mb-4"><%= ad.body %></p>
+
+          <div class="flex gap-4">
+            <form method="POST" action="/admin/ad/<%= ad.id %>/archive">
+              <button
+                type="submit"
+                class="px-4 py-2 rounded-lg bg-gray-800 text-white text-sm hover:bg-black transition"
+              >
+                Archive
+              </button>
+            </form>
+
+            <form method="POST" action="/admin/ad/<%= ad.id %>/remove">
+              <button
+                type="submit"
+                class="px-4 py-2 rounded-lg bg-red-600 text-white text-sm hover:bg-red-700 transition"
+              >
+                Remove
+              </button>
+            </form>
+
+            <a
+              href="/admin/ad/<%= ad.id %>"
+              class="px-4 py-2 rounded-lg bg-gray-100 text-gray-800 text-sm hover:bg-gray-200 transition"
+            >
+              View details
+            </a>
+          </div>
+        </div>
+      <% }) %>
+    </div>
   <% } %>
 
-  <% ads.forEach(ad => { %>
-    <div class="bg-slate-900 p-4 rounded border border-slate-800">
-      <h2 class="text-xl font-semibold mb-1"><%= ad.title %></h2>
-      <p class="text-slate-400 mb-2">By <%= ad.username %></p>
-      <p class="mb-4 whitespace-pre-line"><%= ad.body %></p>
-
-      <p class="text-slate-500 text-sm mb-4">
-        Published at <%= ad.published_at %>
-      </p>
-
-      <!-- ARCHIVE -->
-      <form action="/admin/ads/<%= ad.id %>/archive" method="POST">
-        <button class="bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded">
-          Archive
-        </button>
-      </form>
-    </div>
-  <% }) %>
 </div>
 

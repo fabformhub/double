@@ -1,109 +1,110 @@
-<h1 class="text-2xl font-bold mb-6">Review Ad</h1>
-<%- include('../partials/admin-nav') %>
+<div class="max-w-4xl mx-auto py-16 px-6">
 
-<div class="bg-slate-900 p-6 rounded border border-slate-800 space-y-4">
+  <div class="flex justify-between items-start gap-6 mb-6">
+    <div>
+      <h1 class="text-4xl font-semibold mb-2 tracking-tight"><%= ad.title %></h1>
+      <p class="text-sm text-gray-500">
+        <%= ad.city_name %> · <%= ad.category_name %>
+        <% if (ad.subcategory_name) { %> / <%= ad.subcategory_name %><% } %>
+        · by <%= ad.username %>
+      </p>
+      <p class="text-xs text-gray-400 mt-1">
+        Created: <%= ad.created_at %>
+        <% if (ad.updated_at) { %> · Updated: <%= ad.updated_at %><% } %>
+      </p>
+    </div>
+    <span class="text-xs uppercase tracking-wide px-2 py-1 rounded-full
+      <%= ad.status === 'approved' ? 'bg-green-100 text-green-700' : '' %>
+      <%= ad.status === 'draft' ? 'bg-gray-100 text-gray-700' : '' %>
+      <%= ad.status === 'pending' ? 'bg-yellow-100 text-yellow-700' : '' %>
+      <%= ad.status === 'archived' ? 'bg-gray-200 text-gray-700' : '' %>">
+      <%= ad.status %>
+    </span>
+  </div>
 
-  <h2 class="text-xl font-semibold"><%= ad.title %></h2>
+  <div class="mb-10">
+    <p class="text-lg whitespace-pre-line text-gray-900"><%= ad.body %></p>
+  </div>
 
-  <p class="text-slate-400">
-    Posted by <span class="text-indigo-400"><%= ad.username %></span>
-  </p>
-
-  <p class="whitespace-pre-line text-slate-200"><%= ad.body %></p>
-
-  <% if (ad.category) { %>
-    <p class="text-slate-400">Category: <%= ad.category %></p>
+  <% if (ad.flag_reason || ad.flags && ad.flags.length) { %>
+    <div class="mb-10 p-4 rounded-2xl border border-red-200 bg-red-50/40">
+      <h2 class="text-sm font-semibold text-red-700 mb-2">Flags</h2>
+      <% if (ad.flag_reason) { %>
+        <p class="text-sm text-red-800 mb-1">Latest: <%= ad.flag_reason %></p>
+      <% } %>
+      <% if (ad.flags && ad.flags.length) { %>
+        <ul class="text-xs text-red-800 list-disc pl-5">
+          <% ad.flags.forEach(f => { %>
+            <li><%= f.reason %> — <%= f.created_at %></li>
+          <% }) %>
+        </ul>
+      <% } %>
+    </div>
   <% } %>
 
-  <% if (ad.location) { %>
-    <p class="text-slate-400">Location: <%= ad.location %></p>
-  <% } %>
-
-  <p class="text-slate-500 text-sm">
-    Status: <span class="text-indigo-300"><%= ad.status %></span>
-  </p>
-
-  <% if (ad.admin_notes) { %>
-    <p class="text-yellow-400 text-sm">
-      Admin notes: <%= ad.admin_notes %>
-    </p>
-  <% } %>
-
-  <% if (ad.flagged_reason) { %>
-    <p class="text-red-400 text-sm">
-      Flag reason: <%= ad.flagged_reason %>
-    </p>
-  <% } %>
-
-  <div class="border-t border-slate-700 pt-4 flex gap-2">
-
-    <% if (ad.status === 'in-review') { %>
-      <!-- APPROVE -->
-      <form action="/admin/ads/<%= ad.id %>/approve" method="POST">
-        <button class="bg-green-600 hover:bg-green-500 px-3 py-1 rounded">
+  <div class="flex flex-wrap gap-4">
+    <% if (ad.status === 'pending') { %>
+      <form method="POST" action="/admin/ad/<%= ad.id %>/approve">
+        <button
+          type="submit"
+          class="px-4 py-2 rounded-lg bg-green-600 text-white text-sm hover:bg-green-700 transition"
+        >
           Approve
         </button>
       </form>
 
-      <!-- REJECT -->
-      <form action="/admin/ads/<%= ad.id %>/reject" method="POST">
-        <input type="hidden" name="notes" value="Rejected by admin">
-        <button class="bg-red-600 hover:bg-red-500 px-3 py-1 rounded">
+      <form method="POST" action="/admin/ad/<%= ad.id %>/reject">
+        <button
+          type="submit"
+          class="px-4 py-2 rounded-lg bg-red-600 text-white text-sm hover:bg-red-700 transition"
+        >
           Reject
-        </button>
-      </form>
-
-      <!-- REQUEST EDITS -->
-      <form action="/admin/ads/<%= ad.id %>/request-edits" method="POST">
-        <input type="hidden" name="notes" value="Please edit and resubmit">
-        <button class="bg-yellow-600 hover:bg-yellow-500 px-3 py-1 rounded">
-          Request Edits
         </button>
       </form>
     <% } %>
 
     <% if (ad.status === 'approved') { %>
-      <!-- PUBLISH -->
-      <form action="/admin/ads/<%= ad.id %>/publish" method="POST">
-        <button class="bg-blue-600 hover:bg-blue-500 px-3 py-1 rounded">
-          Publish
-        </button>
-      </form>
-    <% } %>
-
-    <% if (ad.status === 'published') { %>
-      <!-- ARCHIVE -->
-      <form action="/admin/ads/<%= ad.id %>/archive" method="POST">
-        <button class="bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded">
+      <form method="POST" action="/admin/ad/<%= ad.id %>/archive">
+        <button
+          type="submit"
+          class="px-4 py-2 rounded-lg bg-gray-800 text-white text-sm hover:bg-black transition"
+        >
           Archive
         </button>
       </form>
     <% } %>
 
-    <% if (ad.status === 'flagged') { %>
-      <!-- APPROVE -->
-      <form action="/admin/ads/<%= ad.id %>/approve" method="POST">
-        <button class="bg-green-600 hover:bg-green-500 px-3 py-1 rounded">
-          Approve
-        </button>
-      </form>
-
-      <!-- REJECT -->
-      <form action="/admin/ads/<%= ad.id %>/reject" method="POST">
-        <input type="hidden" name="notes" value="Rejected after flag review">
-        <button class="bg-red-600 hover:bg-red-500 px-3 py-1 rounded">
-          Reject
-        </button>
-      </form>
-
-      <!-- ARCHIVE -->
-      <form action="/admin/ads/<%= ad.id %>/archive" method="POST">
-        <button class="bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded">
-          Archive
+    <% if (ad.status === 'archived') { %>
+      <form method="POST" action="/admin/ad/<%= ad.id %>/restore">
+        <button
+          type="submit"
+          class="px-4 py-2 rounded-lg bg-pink-600 text-white text-sm hover:bg-pink-700 transition"
+        >
+          Restore
         </button>
       </form>
     <% } %>
 
+    <form method="POST" action="/admin/ad/<%= ad.id %>/remove">
+      <button
+        type="submit"
+        class="px-4 py-2 rounded-lg bg-red-600 text-white text-sm hover:bg-red-700 transition"
+      >
+        Remove
+      </button>
+    </form>
+
+    <% if (ad.flag_reason || (ad.flags && ad.flags.length)) { %>
+      <form method="POST" action="/admin/ad/<%= ad.id %>/clear-flags">
+        <button
+          type="submit"
+          class="px-4 py-2 rounded-lg bg-gray-100 text-gray-800 text-sm hover:bg-gray-200 transition"
+        >
+          Clear flags
+        </button>
+      </form>
+    <% } %>
   </div>
+
 </div>
 

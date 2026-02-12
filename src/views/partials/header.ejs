@@ -1,32 +1,47 @@
-<header class="p-4 border-b border-slate-800 mb-6">
-  <nav class="flex items-center gap-6">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title><%= title %></title>
+  <link href="/public/styles.css" rel="stylesheet">
+</head>
 
-    <!-- Logo / Home -->
-    <a href="/" class="text-xl font-semibold text-indigo-400 hover:text-indigo-300">
-      Double
+<body class="bg-white text-gray-900">
+
+<nav class="w-full border-b border-gray-200 bg-white">
+  <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+
+    <!-- Brand -->
+    <a href="/" class="text-3xl font-semibold tracking-tight text-pink-600">
+      NookyUp
     </a>
 
-    <!-- Main navigation -->
-    <a href="/ads" class="text-slate-300 hover:text-slate-100">Browse Ads</a>
+    <!-- Desktop Nav -->
+    <div class="hidden md:flex items-center gap-12 text-lg font-medium">
+      <a href="/" class="hover:text-pink-600 transition">Home</a>
+      <a href="/login" class="hover:text-pink-600 transition">Login</a>
+      <a href="/signup" class="hover:text-pink-600 transition">Sign Up</a>
+    </div>
 
-    <% if (userId) { %>
-      <a href="/dashboard" class="text-slate-300 hover:text-slate-100">Dashboard</a>
-      <a href="/ads/new" class="text-slate-300 hover:text-slate-100">Post Ad</a>
+    <!-- Mobile Menu Button -->
+    <button id="mobileMenuBtn" class="md:hidden text-3xl text-gray-700">
+      ☰
+    </button>
+  </div>
 
-      <!-- Push right -->
-      <span class="ml-auto text-slate-400 text-sm"><%= userEmail %></span>
-      <a href="/logout" class="text-slate-400 hover:text-slate-200">Logout</a>
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="hidden md:hidden px-6 pb-6 flex flex-col gap-4 text-lg font-medium">
+    <a href="/" class="hover:text-pink-600 transition">Home</a>
+    <a href="/login" class="hover:text-pink-600 transition">Login</a>
+    <a href="/signup" class="hover:text-pink-600 transition">Sign Up</a>
+  </div>
+</nav>
 
-    <% } else { %>
+<script>
+  const btn = document.getElementById("mobileMenuBtn");
+  const menu = document.getElementById("mobileMenu");
 
-      <!-- Push right -->
-      <div class="ml-auto flex gap-4">
-        <a href="/login" class="text-slate-400 hover:text-slate-200">Login</a>
-        <a href="/signup" class="text-slate-400 hover:text-slate-200">Signup</a>
-      </div>
-
-    <% } %>
-
-  </nav>
-</header>
+  btn.addEventListener("click", () => {
+    menu.classList.toggle("hidden");
+  });
+</script>
 

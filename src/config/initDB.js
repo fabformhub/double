@@ -1,29 +1,41 @@
-import db from "./db.js";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import Database from "better-sqlite3";
+import db, { DB_PATH } from "./db.js"; // <-- unified import
 
-// Resolve directory paths
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Load schema.sql
+// SQL file paths
 const schemaPath = path.join(__dirname, "schema.sql");
-const schema = fs.readFileSync(schemaPath, "utf8");
+const seedLocationsPath = path.join(__dirname, "seed_locations.sql");
+const seedCategoriesPath = path.join(__dirname, "seed_categories.sql");
+const seedSubcategoriesPath = path.join(__dirname, "seed_subcategories.sql");
 
-// Execute schema
-db.exec(schema);
-console.log("Tables created successfully.");
-
-// Load seed_locations.sql
-const seedPath = path.join(__dirname, "seed_locations.sql");
-if (fs.existsSync(seedPath)) {
-  const seedSQL = fs.readFileSync(seedPath, "utf8");
-  db.exec(seedSQL);
-  console.log("Locations seeded successfully.");
-} else {
-  console.warn("seed_locations.sql not found — skipping seeding.");
+// Delete old DB
+if (fs.existsSync(DB_PATH)) {
+  fs.unlinkSync(DB_PATH);
+  console.log("Deleted old nookyup.db");
 }
 
-console.log("Database initialized and seeded.");
+// Create new DB using the same path as the app
+const fresh = new Database(DB_PATH);
+console.log("Created new nookyup.db");
+
+// Helper to run SQL files
+function runSQL(filePath) {
+  const sql = fs.readFileSync(filePath, "utf8");
+  fresh.exec(sql);
+  console.log(`Executed: ${path.basename(filePath)}`);
+}
+
+// Run schema + seeds
+runSQL(schemaPath);
+runSQL(seedLocationsPath);
+runSQL(seedCategoriesPath);
+runSQL(seedSubcategoriesPath);
+
+console.log("Database initialized successfully.");
+fresh.close();
 

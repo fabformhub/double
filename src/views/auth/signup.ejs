@@ -7,21 +7,51 @@
     </div>
   <% } %>
 
-  <form method="POST">
+  <form method="POST" action="/signup">
     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
-    <input name="email" type="email" placeholder="Email"
-      class="w-full mb-3 px-4 py-2 rounded bg-slate-800 border border-slate-700" required>
+    <input 
+      name="username" 
+      type="text" 
+      placeholder="Username"
+      class="w-full mb-3 px-4 py-2 rounded bg-slate-800 border border-slate-700"
+      required
+    >
 
-    <input name="password" type="password" placeholder="Password"
-      class="w-full mb-3 px-4 py-2 rounded bg-slate-800 border border-slate-700" required>
+    <input 
+      name="email" 
+      type="email" 
+      placeholder="Email"
+      class="w-full mb-3 px-4 py-2 rounded bg-slate-800 border border-slate-700"
+      required
+    >
 
-    <input name="confirmPassword" type="password" placeholder="Confirm Password"
-      class="w-full mb-3 px-4 py-2 rounded bg-slate-800 border border-slate-700" required>
+    <input 
+      name="password" 
+      type="password" 
+      placeholder="Password"
+      class="w-full mb-3 px-4 py-2 rounded bg-slate-800 border border-slate-700"
+      required
+    >
+
+    <input 
+      name="confirmPassword" 
+      type="password" 
+      placeholder="Confirm Password"
+      class="w-full mb-3 px-4 py-2 rounded bg-slate-800 border border-slate-700"
+      required
+    >
 
     <button class="w-full bg-indigo-600 hover:bg-indigo-500 py-2 rounded font-medium">
       Sign Up
     </button>
   </form>
+
+  <div class="text-center mt-4 text-slate-400">
+    Already have an account?
+    <a href="/login" class="text-indigo-400 hover:text-indigo-300 font-medium">
+      Log in here
+    </a>
+  </div>
 </div>
 

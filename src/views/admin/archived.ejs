@@ -1,22 +1,69 @@
-<h1 class="text-2xl font-bold mb-6">Archived Ads</h1>
-<%- include('../partials/admin-nav') %>
+<div class="max-w-6xl mx-auto py-16 px-6">
 
-<div class="space-y-4">
-  <% if (ads.length === 0) { %>
-    <p class="text-slate-400">No archived ads.</p>
+  <h1 class="text-4xl font-semibold mb-10 tracking-tight">
+    Archived ads
+  </h1>
+
+  <p class="text-lg text-gray-600 mb-8">
+    Ads that have been archived and are no longer visible publicly.
+  </p>
+
+  <% if (!ads || ads.length === 0) { %>
+    <p class="text-gray-600 text-lg">No archived ads.</p>
+  <% } else { %>
+    <div class="flex flex-col gap-6">
+      <% ads.forEach(ad => { %>
+        <div class="p-5 rounded-2xl border border-gray-200 bg-gray-50">
+          <div class="flex justify-between items-start gap-4 mb-3">
+            <div>
+              <h2 class="text-2xl font-semibold mb-1">
+                <a href="/admin/ad/<%= ad.id %>" class="hover:underline">
+                  <%= ad.title %>
+                </a>
+              </h2>
+              <p class="text-sm text-gray-500">
+                <%= ad.city_name %> · <%= ad.category_name %>
+                <% if (ad.subcategory_name) { %> / <%= ad.subcategory_name %><% } %>
+                · by <%= ad.username %>
+              </p>
+            </div>
+            <p class="text-xs text-gray-500">
+              Archived: <%= ad.archived_at || ad.updated_at || ad.created_at %>
+            </p>
+          </div>
+
+          <p class="text-gray-800 line-clamp-3 mb-4"><%= ad.body %></p>
+
+          <div class="flex gap-4">
+            <form method="POST" action="/admin/ad/<%= ad.id %>/restore">
+              <button
+                type="submit"
+                class="px-4 py-2 rounded-lg bg-pink-600 text-white text-sm hover:bg-pink-700 transition"
+              >
+                Restore
+              </button>
+            </form>
+
+            <form method="POST" action="/admin/ad/<%= ad.id %>/delete">
+              <button
+                type="submit"
+                class="px-4 py-2 rounded-lg bg-red-600 text-white text-sm hover:bg-red-700 transition"
+              >
+                Delete permanently
+              </button>
+            </form>
+
+            <a
+              href="/admin/ad/<%= ad.id %>"
+              class="px-4 py-2 rounded-lg bg-white text-gray-800 text-sm border border-gray-200 hover:bg-gray-50 transition"
+            >
+              View details
+            </a>
+          </div>
+        </div>
+      <% }) %>
+    </div>
   <% } %>
 
-  <% ads.forEach(ad => { %>
-    <div class="bg-slate-900 p-4 rounded border border-slate-800">
-      <h2 class="text-xl font-semibold mb-1"><%= ad.title %></h2>
-      <p class="text-slate-400 mb-2">By <%= ad.username %></p>
-
-      <p class="mb-4 whitespace-pre-line"><%= ad.body %></p>
-
-      <p class="text-slate-500 text-sm">
-        Archived at <%= ad.archived_at %>
-      </p>
-    </div>
-  <% }) %>
 </div>
 

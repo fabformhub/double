@@ -1,72 +1,70 @@
----------------------------------------------------
--- USERS TABLE
----------------------------------------------------
+-- USERS
 CREATE TABLE IF NOT EXISTS users (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   email TEXT UNIQUE NOT NULL,
   username TEXT UNIQUE NOT NULL,
-  password_hash TEXT NOT NULL,
+  password TEXT NOT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
----------------------------------------------------
--- LOCATIONS TABLE
----------------------------------------------------
+-- LOCATIONS
 CREATE TABLE IF NOT EXISTS locations (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  country_code TEXT NOT NULL,     -- uk, ie
-  city_name TEXT NOT NULL,        -- Manchester
-  slug TEXT NOT NULL UNIQUE       -- mcr, ldn, dub, etc.
+  country_code TEXT NOT NULL,
+  city_name TEXT NOT NULL,
+  slug TEXT NOT NULL UNIQUE
 );
 
----------------------------------------------------
--- ADS TABLE (LOCATION-AWARE)
----------------------------------------------------
+-- CATEGORIES
+CREATE TABLE IF NOT EXISTS categories (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  slug TEXT NOT NULL UNIQUE
+);
+
+-- SUBCATEGORIES
+CREATE TABLE IF NOT EXISTS subcategories (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  category_id INTEGER NOT NULL,
+  name TEXT NOT NULL,
+  slug TEXT NOT NULL,
+  FOREIGN KEY (category_id) REFERENCES categories(id)
+);
+
+-- ADS
 CREATE TABLE IF NOT EXISTS ads (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id INTEGER NOT NULL,
-
   title TEXT NOT NULL,
   body TEXT NOT NULL,
-  category TEXT,
-
-  -- NEW: location slug (short, URL-friendly)
-  location_slug TEXT NOT NULL,    -- e.g. mcr, ldn, dub
-
-  -- Moderation workflow (your existing fields)
-  status TEXT NOT NULL DEFAULT 'in_review',
-
-  is_reported INTEGER NOT NULL DEFAULT 0,
-  is_featured INTEGER NOT NULL DEFAULT 0,
-  is_sensitive INTEGER NOT NULL DEFAULT 0,
-  is_shadow_hidden INTEGER NOT NULL DEFAULT 0,
-  review_priority TEXT DEFAULT 'normal',
-
+  category_slug TEXT NOT NULL,
+  subcategory_slug TEXT,
+  location_slug TEXT NOT NULL,
+  status TEXT DEFAULT 'pending',
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
----------------------------------------------------
--- MESSAGES TABLE
----------------------------------------------------
+-- FLAGS
+CREATE TABLE IF NOT EXISTS flags (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  ad_id INTEGER NOT NULL,
+  reason TEXT NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (ad_id) REFERENCES ads(id)
+);
+
+-- MESSAGES
 CREATE TABLE IF NOT EXISTS messages (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   sender_id INTEGER NOT NULL,
-  recipient_id INTEGER NOT NULL,
+  receiver_id INTEGER NOT NULL,
+  ad_id INTEGER NOT NULL,
   body TEXT NOT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-
   FOREIGN KEY (sender_id) REFERENCES users(id),
-  FOREIGN KEY (recipient_id) REFERENCES users(id)
-);
-
----------------------------------------------------
--- SESSIONS TABLE (if using express-session SQLite)
----------------------------------------------------
-CREATE TABLE IF NOT EXISTS sessions (
-  sid TEXT PRIMARY KEY,
-  sess TEXT NOT NULL,
-  expire DATETIME NOT NULL
+  FOREIGN KEY (receiver_id) REFERENCES users(id),
+  FOREIGN KEY (ad_id) REFERENCES ads(id)
 );
 

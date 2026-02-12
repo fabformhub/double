@@ -1,124 +1,70 @@
-<h1 class="text-2xl font-bold mb-6">Your Ads</h1>
+<div class="max-w-5xl mx-auto py-16 px-6">
 
-<a href="/ads/new"
-   class="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded inline-block mb-6">
-  + Create New Ad
-</a>
+  <h1 class="text-4xl font-semibold mb-10 tracking-tight">
+    Your NookyUp dashboard
+  </h1>
 
-<div class="space-y-6">
+  <p class="text-lg text-gray-600 mb-10">
+    Manage your ads, drafts, and activity.
+  </p>
 
-  <!-- DRAFTS -->
-  <section>
-    <h2 class="text-xl font-semibold mb-2">Drafts</h2>
-    <% const drafts = ads.filter(a => a.status === 'draft'); %>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+    <div class="p-5 rounded-2xl bg-gray-50">
+      <p class="text-sm text-gray-500 mb-1">Live ads</p>
+      <p class="text-3xl font-semibold"><%= stats.live || 0 %></p>
+    </div>
+    <div class="p-5 rounded-2xl bg-gray-50">
+      <p class="text-sm text-gray-500 mb-1">Drafts</p>
+      <p class="text-3xl font-semibold"><%= stats.drafts || 0 %></p>
+    </div>
+    <div class="p-5 rounded-2xl bg-gray-50">
+      <p class="text-sm text-gray-500 mb-1">Pending review</p>
+      <p class="text-3xl font-semibold"><%= stats.pending || 0 %></p>
+    </div>
+  </div>
 
-    <% if (drafts.length === 0) { %>
-      <p class="text-slate-500">No drafts.</p>
-    <% } %>
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-medium">Your ads</h2>
+    <a href="/start" class="text-pink-600 hover:underline text-lg">
+      + Post a new ad
+    </a>
+  </div>
 
-    <% drafts.forEach(ad => { %>
-      <div class="bg-slate-900 p-4 rounded border border-slate-800 mb-2">
-        <h3 class="text-lg font-semibold"><%= ad.title %></h3>
-        <p class="text-slate-400 mb-3"><%= ad.body %></p>
-
-        <a href="/ads/<%= ad.id %>/edit" class="text-indigo-400 hover:text-indigo-300 mr-4">
-          Edit
-        </a>
-
-        <form action="/ads/<%= ad.id %>/submit" method="POST" class="inline">
-          <button class="bg-blue-600 hover:bg-blue-500 px-3 py-1 rounded">
-            Submit for Review
-          </button>
-        </form>
-      </div>
-    <% }) %>
-  </section>
-
-  <!-- IN REVIEW -->
-  <section>
-    <h2 class="text-xl font-semibold mb-2">Submitted for Review</h2>
-    <% const inReview = ads.filter(a => a.status === 'in-review'); %>
-
-    <% if (inReview.length === 0) { %>
-      <p class="text-slate-500">No ads in review.</p>
-    <% } %>
-
-    <% inReview.forEach(ad => { %>
-      <div class="bg-slate-900 p-4 rounded border border-slate-800 mb-2">
-        <h3 class="text-lg font-semibold"><%= ad.title %></h3>
-        <p class="text-slate-400">Waiting for admin approval.</p>
-      </div>
-    <% }) %>
-  </section>
-
-  <!-- NEEDS EDIT -->
-  <section>
-    <h2 class="text-xl font-semibold mb-2">Needs Edits</h2>
-    <% const needsEdit = ads.filter(a => a.status === 'needs-edit'); %>
-
-    <% if (needsEdit.length === 0) { %>
-      <p class="text-slate-500">No ads needing edits.</p>
-    <% } %>
-
-    <% needsEdit.forEach(ad => { %>
-      <div class="bg-slate-900 p-4 rounded border border-slate-800 mb-2">
-        <h3 class="text-lg font-semibold"><%= ad.title %></h3>
-
-        <p class="text-yellow-400 mb-2">
-          Admin notes: <%= ad.admin_notes %>
-        </p>
-
-        <a href="/ads/<%= ad.id %>/edit" class="text-indigo-400 hover:text-indigo-300 mr-4">
-          Edit & Resubmit
-        </a>
-      </div>
-    <% }) %>
-  </section>
-
-  <!-- REJECTED -->
-  <section>
-    <h2 class="text-xl font-semibold mb-2">Rejected</h2>
-    <% const rejected = ads.filter(a => a.status === 'rejected'); %>
-
-    <% if (rejected.length === 0) { %>
-      <p class="text-slate-500">No rejected ads.</p>
-    <% } %>
-
-    <% rejected.forEach(ad => { %>
-      <div class="bg-slate-900 p-4 rounded border border-slate-800 mb-2">
-        <h3 class="text-lg font-semibold"><%= ad.title %></h3>
-
-        <p class="text-red-400 mb-2">
-          Reason: <%= ad.admin_notes %>
-        </p>
-
-        <a href="/ads/<%= ad.id %>/edit" class="text-indigo-400 hover:text-indigo-300 mr-4">
-          Fix & Resubmit
-        </a>
-      </div>
-    <% }) %>
-  </section>
-
-  <!-- PUBLISHED -->
-  <section>
-    <h2 class="text-xl font-semibold mb-2">Published</h2>
-    <% const published = ads.filter(a => a.status === 'published'); %>
-
-    <% if (published.length === 0) { %>
-      <p class="text-slate-500">No published ads.</p>
-    <% } %>
-
-    <% published.forEach(ad => { %>
-      <div class="bg-slate-900 p-4 rounded border border-slate-800 mb-2">
-        <h3 class="text-lg font-semibold"><%= ad.title %></h3>
-        <p class="text-slate-400 mb-2">Live on the site</p>
-
-        <a href="/ads/<%= ad.id %>" class="text-indigo-400 hover:text-indigo-300">
-          View
-        </a>
-      </div>
-    <% }) %>
-  </section>
+  <% if (!ads || ads.length === 0) { %>
+    <p class="text-gray-600 text-lg">You haven’t posted any ads yet.</p>
+  <% } else { %>
+    <div class="flex flex-col gap-6">
+      <% ads.forEach(ad => { %>
+        <div class="p-4 rounded-xl border border-gray-200 flex flex-col gap-2">
+          <div class="flex justify-between items-center">
+            <h3 class="text-xl font-semibold"><%= ad.title %></h3>
+            <span class="text-xs uppercase tracking-wide px-2 py-1 rounded-full
+              <%= ad.status === 'approved' ? 'bg-green-100 text-green-700' : '' %>
+              <%= ad.status === 'draft' ? 'bg-gray-100 text-gray-700' : '' %>
+              <%= ad.status === 'pending' ? 'bg-yellow-100 text-yellow-700' : '' %>">
+              <%= ad.status %>
+            </span>
+          </div>
+          <p class="text-sm text-gray-500">
+            <%= ad.city_name %> · <%= ad.category_name %>
+            <% if (ad.subcategory_name) { %> / <%= ad.subcategory_name %><% } %>
+          </p>
+          <p class="text-gray-700 line-clamp-2"><%= ad.body %></p>
+          <div class="flex gap-4 mt-3 text-sm">
+            <a href="<%= ad.publicUrl %>" class="text-pink-600 hover:underline">View</a>
+            <a href="<%= ad.editUrl %>" class="text-gray-700 hover:underline">Edit</a>
+            <% if (ad.status === 'draft') { %>
+              <form method="POST" action="<%= ad.submitUrl %>" class="inline">
+                <button class="text-gray-700 hover:underline" type="submit">
+                  Submit for review
+                </button>
+              </form>
+            <% } %>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
 
 </div>
 

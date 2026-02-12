@@ -1,22 +1,25 @@
-<%- include("partials/header", { title }) %>
 
-<div class="max-w-3xl mx-auto py-16 px-6">
+<div class="max-w-5xl mx-auto py-20 px-6">
 
-  <h1 class="text-4xl font-semibold text-center mb-12 tracking-tight">
-    Select Your City
+  <h1 class="text-5xl font-semibold text-center mb-20 tracking-tight text-gray-900">
+    Welcome to <span class="text-pink-600">NookyUp</span>
   </h1>
 
+  <p class="text-center text-xl text-gray-600 mb-20">
+    Choose your city to get started.
+  </p>
+
   <!-- UNITED KINGDOM -->
-  <section class="mb-14">
-    <h2 class="text-lg font-semibold text-gray-600 mb-4 flex items-center gap-2">
-      <span>🇬🇧</span> United Kingdom
+  <section class="mb-20">
+    <h2 class="text-2xl font-medium text-gray-700 mb-8 flex items-center gap-3">
+      <span class="text-3xl">🇬🇧</span> United Kingdom
     </h2>
 
-    <div class="grid grid-cols-2 sm:grid-cols-3 gap-y-3">
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-y-4 gap-x-10">
       <% locations.uk.forEach(loc => { %>
         <a 
-          href="/<%= loc.country_code %>/<%= loc.slug %>/ads"
-          class="flex items-center gap-2 text-lg text-gray-800 hover:text-black transition"
+          href="/<%= loc.country_code %>/<%= loc.slug %>"
+          class="flex items-center gap-3 text-xl text-gray-800 hover:text-pink-600 transition"
         >
           <span>📍</span> <%= loc.city_name %>
         </a>
@@ -24,19 +27,19 @@
     </div>
   </section>
 
-  <hr class="my-10 border-gray-200">
+  <hr class="border-gray-300 my-20">
 
   <!-- IRELAND -->
   <section>
-    <h2 class="text-lg font-semibold text-gray-600 mb-4 flex items-center gap-2">
-      <span>🇮🇪</span> Ireland
+    <h2 class="text-2xl font-medium text-gray-700 mb-8 flex items-center gap-3">
+      <span class="text-3xl">🇮🇪</span> Ireland
     </h2>
 
-    <div class="grid grid-cols-2 sm:grid-cols-3 gap-y-3">
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-y-4 gap-x-10">
       <% locations.ie.forEach(loc => { %>
         <a 
-          href="/<%= loc.country_code %>/<%= loc.slug %>/ads"
-          class="flex items-center gap-2 text-lg text-gray-800 hover:text-black transition"
+          href="/<%= loc.country_code %>/<%= loc.slug %>"
+          class="flex items-center gap-3 text-xl text-gray-800 hover:text-pink-600 transition"
         >
           <span>📍</span> <%= loc.city_name %>
         </a>
@@ -46,5 +49,4 @@
 
 </div>
 
-<%- include("partials/footer") %>
 

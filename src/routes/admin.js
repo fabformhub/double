@@ -1,93 +1,171 @@
 import express from "express";
 import db from "../config/db.js";
-import {
-  approveAd,
-  rejectAd,
-  requestEdits,
-  publishAd,
-  archiveAd
-} from "../controllers/adsModerationController.js";
 
 const router = express.Router();
 
-// Require admin
+// Require admin login
 function requireAdmin(req, res, next) {
-  if (!req.session.isAdmin) return res.redirect("/login");
+  if (!req.session.isAdmin) return res.status(403).send("Admins only");
   next();
 }
 
+// Helper to hydrate ads with location/category/subcategory names
+function hydrateAds(rawAds) {
+  return rawAds.map(ad => {
+    const city = db.prepare(`SELECT city_name FROM locations WHERE slug = ?`).get(ad.location_slug);
+    const cat = db.prepare(`SELECT name FROM categories WHERE slug = ?`).get(ad.category_slug);
+    const sub = ad.subcategory_slug
+      ? db.prepare(`SELECT name FROM subcategories WHERE slug = ?`).get(ad.subcategory_slug)
+      : null;
+
+    return {
+      ...ad,
+      city_name: city?.city_name || "",
+      category_name: cat?.name || "",
+      subcategory_name: sub?.name || null
+    };
+  });
+}
+
+//
 // REVIEW QUEUE
-router.get("/review-queue", requireAdmin, (req, res) => {
+//
+router.get("/admin/review-queue", requireAdmin, (req, res) => {
   const ads = db.prepare(`
     SELECT ads.*, users.username
     FROM ads
     JOIN users ON users.id = ads.user_id
-    WHERE ads.status = 'in-review'
+    WHERE ads.status = 'pending'
+    ORDER BY ads.created_at ASC
+  `).all();
+
+  res.render("admin/review-queue", {
+    ads: hydrateAds(ads)
+  });
+});
+
+//
+// PUBLISHED ADS
+//
+router.get("/admin/published", requireAdmin, (req, res) => {
+  const ads = db.prepare(`
+    SELECT ads.*, users.username
+    FROM ads
+    JOIN users ON users.id = ads.user_id
+    WHERE ads.status = 'approved'
     ORDER BY ads.created_at DESC
   `).all();
 
-  res.render("admin/review-queue", { title: "Review Queue", ads });
+  res.render("admin/published", {
+    ads: hydrateAds(ads)
+  });
 });
 
-// PUBLISHED
-router.get("/published", requireAdmin, (req, res) => {
+//
+// FLAGGED ADS
+//
+router.get("/admin/flagged", requireAdmin, (req, res) => {
   const ads = db.prepare(`
-    SELECT ads.*, users.username
+    SELECT ads.*, users.username, ads.flag_reason
     FROM ads
     JOIN users ON users.id = ads.user_id
-    WHERE ads.status = 'published'
-    ORDER BY ads.published_at DESC
+    WHERE ads.flag_reason IS NOT NULL
+    ORDER BY ads.created_at DESC
   `).all();
 
-  res.render("admin/published", { title: "Published Ads", ads });
+  res.render("admin/flagged", {
+    ads: hydrateAds(ads)
+  });
 });
 
-// ARCHIVED
-router.get("/archived", requireAdmin, (req, res) => {
+//
+// ARCHIVED ADS
+//
+router.get("/admin/archived", requireAdmin, (req, res) => {
   const ads = db.prepare(`
     SELECT ads.*, users.username
     FROM ads
     JOIN users ON users.id = ads.user_id
     WHERE ads.status = 'archived'
-    ORDER BY ads.archived_at DESC
+    ORDER BY ads.updated_at DESC
   `).all();
 
-  res.render("admin/archived", { title: "Archived Ads", ads });
+  res.render("admin/archived", {
+    ads: hydrateAds(ads)
+  });
 });
 
-// FLAGGED
-router.get("/flagged", requireAdmin, (req, res) => {
-  const ads = db.prepare(`
-    SELECT ads.*, users.username
-    FROM ads
-    JOIN users ON users.id = ads.user_id
-    WHERE ads.status = 'flagged'
-    ORDER BY ads.created_at DESC
-  `).all();
+//
+// VIEW SINGLE AD
+//
+router.get("/admin/ad/:id", requireAdmin, (req, res) => {
+  const { id } = req.params;
 
-  res.render("admin/flagged", { title: "Flagged Ads", ads });
-});
-
-// VIEW AD DETAILS
-router.get("/ads/:id", requireAdmin, (req, res) => {
   const ad = db.prepare(`
     SELECT ads.*, users.username
     FROM ads
     JOIN users ON users.id = ads.user_id
     WHERE ads.id = ?
-  `).get(req.params.id);
+  `).get(id);
 
   if (!ad) return res.status(404).send("Ad not found");
 
-  res.render("admin/view-ad", { title: "Review Ad", ad });
+  const hydrated = hydrateAds([ad])[0];
+
+  // Optional flags table support
+  let flags = [];
+  try {
+    flags = db.prepare(`
+      SELECT * FROM flags WHERE ad_id = ? ORDER BY created_at DESC
+    `).all(id);
+  } catch (e) {
+    // flags table doesn't exist — safe to ignore
+  }
+
+  res.render("admin/view-ad", {
+    ad: hydrated,
+    flags
+  });
 });
 
-// ACTION ROUTES
-router.post("/ads/:id/approve", requireAdmin, approveAd);
-router.post("/ads/:id/reject", requireAdmin, rejectAd);
-router.post("/ads/:id/request-edits", requireAdmin, requestEdits);
-router.post("/ads/:id/publish", requireAdmin, publishAd);
-router.post("/ads/:id/archive", requireAdmin, archiveAd);
+//
+// ACTIONS
+//
+
+router.post("/admin/ad/:id/approve", requireAdmin, (req, res) => {
+  db.prepare(`UPDATE ads SET status = 'approved', flag_reason = NULL WHERE id = ?`).run(req.params.id);
+  res.redirect("/admin/review-queue");
+});
+
+router.post("/admin/ad/:id/reject", requireAdmin, (req, res) => {
+  db.prepare(`UPDATE ads SET status = 'rejected' WHERE id = ?`).run(req.params.id);
+  res.redirect("/admin/review-queue");
+});
+
+router.post("/admin/ad/:id/archive", requireAdmin, (req, res) => {
+  db.prepare(`UPDATE ads SET status = 'archived', updated_at = CURRENT_TIMESTAMP WHERE id = ?`).run(req.params.id);
+  res.redirect("/admin/published");
+});
+
+router.post("/admin/ad/:id/restore", requireAdmin, (req, res) => {
+  db.prepare(`UPDATE ads SET status = 'approved', updated_at = CURRENT_TIMESTAMP WHERE id = ?`).run(req.params.id);
+  res.redirect("/admin/archived");
+});
+
+router.post("/admin/ad/:id/remove", requireAdmin, (req, res) => {
+  db.prepare(`DELETE FROM ads WHERE id = ?`).run(req.params.id);
+  res.redirect("/admin/published");
+});
+
+router.post("/admin/ad/:id/clear-flags", requireAdmin, (req, res) => {
+  db.prepare(`UPDATE ads SET flag_reason = NULL WHERE id = ?`).run(req.params.id);
+
+  try {
+    db.prepare(`DELETE FROM flags WHERE ad_id = ?`).run(req.params.id);
+  } catch (e) {}
+
+  res.redirect("/admin/flagged");
+});
 
 export default router;
 
