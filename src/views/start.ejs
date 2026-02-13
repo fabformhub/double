@@ -8,6 +8,19 @@
 </head>
 
 <body class="bg-white text-gray-900">
+
+<!-- GLOBAL ALPINE STORE -->
+<script>
+document.addEventListener('alpine:init', () => {
+  Alpine.store('ad', {
+    country: "",
+    city: "",
+    category: null,
+    subcategory: null
+  });
+});
+</script>
+
 <div class="max-w-3xl mx-auto py-16 px-6">
 
   <h1 class="text-4xl font-semibold mb-6 tracking-tight">Post a new ad</h1>
@@ -39,7 +52,8 @@
     </select>
     <div class="text-sm text-gray-500 mb-6" x-text="debugCities"></div>
 
-    <button onclick="nextStep()" class="w-full bg-pink-600 hover:bg-pink-500 text-white py-3 rounded-lg text-lg font-medium">
+    <button @click="saveAndNext"
+            class="w-full bg-pink-600 hover:bg-pink-500 text-white py-3 rounded-lg text-lg font-medium transition-all duration-200">
       Continue →
     </button>
   </div>
@@ -50,7 +64,7 @@
 
     <!-- Category -->
     <label class="block mb-2 text-gray-700 font-medium">Category</label>
-    <select x-model="selectedCategory" @change="loadSubcategories()"
+    <select x-model="selectedCategoryId" @change="loadSubcategories()"
             class="w-full p-3 border rounded-lg bg-white mb-2 text-black">
       <option value="">Select a category</option>
       <template x-for="cat in categories" :key="cat.id">
@@ -61,7 +75,7 @@
 
     <!-- Subcategory -->
     <label class="block mb-2 text-gray-700 font-medium">Subcategory</label>
-    <select x-model="selectedSubcategory" :disabled="subcategories.length === 0"
+    <select x-model="selectedSubcategoryId" :disabled="subcategories.length === 0"
             class="w-full p-3 border rounded-lg bg-white mb-2 text-black">
       <option value="">Select a subcategory</option>
       <template x-for="sub in subcategories" :key="sub.id">
@@ -72,24 +86,28 @@
 
     <div class="flex justify-between mt-6">
       <button onclick="prevStep()" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 rounded-lg">← Back</button>
-      <button onclick="nextStep()" class="px-6 py-3 bg-pink-600 hover:bg-pink-500 text-white rounded-lg">Continue →</button>
+      <button @click="saveAndNext"
+              class="px-6 py-3 bg-pink-600 hover:bg-pink-500 text-white rounded-lg transition-all duration-200">
+        Continue →
+      </button>
     </div>
   </div>
 
   <!-- STEP 3 -->
   <div id="step3" x-data="summaryStep()" style="display:none;">
-    <h2 class="text-2xl font-medium mb-6">Ready to create your ad?</h2>
+    <h2 class="text-3xl font-semibold mb-6">Ready to create your ad?</h2>
 
-    <ul class="mb-8 text-gray-800">
-      <li><strong>Country:</strong> <span x-text="country"></span></li>
-      <li><strong>City:</strong> <span x-text="city"></span></li>
-      <li><strong>Category:</strong> <span x-text="category"></span></li>
-      <li><strong>Subcategory:</strong> <span x-text="subcategory"></span></li>
-    </ul>
+    <p class="text-gray-600 mb-10 text-lg">
+      You’ve selected your location and category. Let’s move on to creating your ad.
+    </p>
 
-    <div class="flex justify-between mt-6">
-      <button onclick="prevStep()" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 rounded-lg">← Back</button>
-      <button onclick="goToNewAd()" class="px-6 py-3 bg-green-600 hover:bg-green-500 text-white rounded-lg">Create Ad →</button>
+    <div class="flex justify-center">
+      <button 
+        @click="goToNewAd"
+        class="px-12 py-4 bg-pink-600 hover:bg-pink-500 text-white text-xl font-semibold rounded-full shadow-lg transition-all duration-200 hover:shadow-xl active:scale-95"
+      >
+        Create My Ad →
+      </button>
     </div>
   </div>
 
@@ -108,31 +126,22 @@ function locationStep() {
 
     async init() {
       this.debug = "Loading countries…";
-      try {
-        const res = await fetch('/api/countries');
-        const data = await res.json();
-        this.countries = data;
-        this.debug = `Loaded ${data.length} countries`;
-      } catch (err) {
-        this.debug = "ERROR loading countries";
-      }
+      const res = await fetch('/api/countries');
+      this.countries = await res.json();
+      this.debug = `Loaded ${this.countries.length} countries`;
     },
 
     async loadCities() {
-      this.debugCities = `Loading cities for ${this.selectedCountry}…`;
-      this.cities = [];
-      this.selectedCity = "";
+      this.debugCities = "Loading cities…";
+      const res = await fetch(`/api/cities?country=${this.selectedCountry}`);
+      this.cities = await res.json();
+      this.debugCities = `Loaded ${this.cities.length} cities`;
+    },
 
-      if (!this.selectedCountry) return;
-
-      try {
-        const res = await fetch(`/api/cities?country=${this.selectedCountry}`);
-        const data = await res.json();
-        this.cities = data;
-        this.debugCities = `Loaded ${data.length} cities`;
-      } catch (err) {
-        this.debugCities = "ERROR loading cities";
-      }
+    saveAndNext() {
+      Alpine.store('ad').country = this.selectedCountry;
+      Alpine.store('ad').city = this.selectedCity;
+      nextStep();
     }
   }
 }
@@ -141,100 +150,70 @@ function categoryStep() {
   return {
     categories: [],
     subcategories: [],
-    selectedCategory: "",
-    selectedSubcategory: "",
+    selectedCategoryId: "",
+    selectedSubcategoryId: "",
     debug: "",
     debugSub: "",
 
+    get selectedCategory() {
+      return this.categories.find(c => c.id == this.selectedCategoryId) || null;
+    },
+
+    get selectedSubcategory() {
+      return this.subcategories.find(s => s.id == this.selectedSubcategoryId) || null;
+    },
+
     async init() {
       this.debug = "Loading categories…";
-      try {
-        const res = await fetch('/api/categories');
-        const data = await res.json();
-        this.categories = data;
-        this.debug = `Loaded ${data.length} categories`;
-      } catch (err) {
-        this.debug = "ERROR loading categories";
-      }
+      const res = await fetch('/api/categories');
+      this.categories = await res.json();
+      this.debug = `Loaded ${this.categories.length} categories`;
     },
 
     async loadSubcategories() {
-      this.debugSub = `Loading subcategories…`;
-      this.subcategories = [];
-      this.selectedSubcategory = "";
+      this.debugSub = "Loading subcategories…";
+      const res = await fetch(`/api/subcategories?category=${this.selectedCategoryId}`);
+      this.subcategories = await res.json();
+      this.debugSub = `Loaded ${this.subcategories.length} subcategories`;
+    },
 
-      if (!this.selectedCategory) return;
-
-      try {
-        const res = await fetch(`/api/subcategories?category=${this.selectedCategory}`);
-        const data = await res.json();
-        this.subcategories = data;
-        this.debugSub = `Loaded ${data.length} subcategories`;
-      } catch (err) {
-        this.debugSub = "ERROR loading subcategories";
-      }
+    saveAndNext() {
+      Alpine.store('ad').category = this.selectedCategory;
+      Alpine.store('ad').subcategory = this.selectedSubcategory;
+      nextStep();
     }
   }
 }
 
 function summaryStep() {
   return {
-    country: "",
-    city: "",
-    category: "",
-    subcategory: "",
+    init() {},
 
-    init() {
-      const loc = document.querySelector('#step1').__x.$data;
-      const cat = document.querySelector('#step2').__x.$data;
+    goToNewAd() {
+      const ad = Alpine.store('ad');
 
-      this.country = loc.selectedCountry;
-      this.city = loc.selectedCity;
-      this.category = cat.selectedCategory;
-      this.subcategory = cat.selectedSubcategory;
+      const url = ad.subcategory
+        ? `/${ad.country}/${ad.city}/${ad.category.slug}/${ad.subcategory.slug}/ads/new`
+        : `/${ad.country}/${ad.city}/${ad.category.slug}/ads/new`;
+
+      window.location.href = url;
     }
   }
 }
 
 // Step Navigation
 window.nextStep = function () {
-  const s1 = document.getElementById("step1");
-  const s2 = document.getElementById("step2");
-  const s3 = document.getElementById("step3");
-
-  if (s1.style.display !== "none") {
-    s1.style.display = "none";
-    s2.style.display = "block";
-    return;
-  }
-
-  if (s2.style.display !== "none") {
-    s2.style.display = "none";
-    s3.style.display = "block";
-    return;
-  }
+  const steps = ["step1", "step2", "step3"];
+  const current = steps.findIndex(id => document.getElementById(id).style.display !== "none");
+  document.getElementById(steps[current]).style.display = "none";
+  document.getElementById(steps[current + 1]).style.display = "block";
 };
 
 window.prevStep = function () {
-  const s1 = document.getElementById("step1");
-  const s2 = document.getElementById("step2");
-  const s3 = document.getElementById("step3");
-
-  if (s3.style.display !== "none") {
-    s3.style.display = "none";
-    s2.style.display = "block";
-    return;
-  }
-
-  if (s2.style.display !== "none") {
-    s2.style.display = "none";
-    s1.style.display = "block";
-    return;
-  }
-};
-
-window.goToNewAd = function () {
-  window.location.href = "/ads/new";
+  const steps = ["step1", "step2", "step3"];
+  const current = steps.findIndex(id => document.getElementById(id).style.display !== "none");
+  document.getElementById(steps[current]).style.display = "none";
+  document.getElementById(steps[current - 1]).style.display = "block";
 };
 </script>
 

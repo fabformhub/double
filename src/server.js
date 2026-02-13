@@ -103,7 +103,7 @@ app.set("layout", "layouts/main");
 // IMPORT ROUTES
 import apiRoutes from "./routes/api.js";
 import authRoutes from "./routes/auth.js";
-import homeRouter from "./routes/home.js";
+import homeRoutes from "./routes/home.js";
 import locationRoutes from "./routes/locations.js";
 import adsRoutes from "./routes/ads.js";
 import messagesRoutes from "./routes/messages.js";
@@ -124,15 +124,15 @@ app.use("/", authRoutes);
 // -----------------------------
 // HOME (city list)
 // -----------------------------
-app.use("/", homeRouter);
+app.use("/", homeRoutes);
 
 // -----------------------------
-// LOCATION + CATEGORY ROUTES
+// LOCATION ROUTES
 // -----------------------------
 app.use("/", locationRoutes);
 
 // -----------------------------
-// ADS ROUTES
+// ADS ROUTES (category + subcategory)
 // -----------------------------
 app.use("/", adsRoutes);
 

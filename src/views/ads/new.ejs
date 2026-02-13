@@ -1,21 +1,71 @@
-<%- include("../partials/header", { title }) %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><%= title %></title>
+  <link href="/css/styles.css" rel="stylesheet">
+</head>
 
-<h1>Post New Ad in <%= location.city_name %></h1>
+<body class="bg-gray-100 text-gray-900">
 
-<form action="/<%= country %>/<%= city %>/ads/new" method="POST">
-  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+<div class="max-w-3xl mx-auto py-12 px-6">
 
-  <label>Title</label>
-  <input type="text" name="title" required>
+  <h1 class="text-3xl font-semibold mb-6">
+    Create Ad in <%= location.city_name %>
+  </h1>
 
-  <label>Body</label>
-  <textarea name="body" required></textarea>
+  <div class="mb-8 bg-white border rounded-lg p-6 shadow-sm">
+    <p class="mb-1"><strong>Country:</strong> <%= country %></p>
+    <p class="mb-1"><strong>City:</strong> <%= location.city_name %></p>
+    <p class="mb-1"><strong>Category:</strong> <%= category.name %></p>
 
-  <label>Category</label>
-  <input type="text" name="category">
+    <% if (subcategory) { %>
+      <p class="mb-1"><strong>Subcategory:</strong> <%= subcategory.name %></p>
+    <% } %>
+  </div>
 
-  <button type="submit" class="btn btn-primary">Save Draft</button>
-</form>
+  <form 
+    action="/<%= country %>/<%= city %>/<%= category.slug %>/<%= subcategory ? subcategory.slug : '' %>/ads/new" 
+    method="POST"
+    class="bg-white border rounded-lg p-6 shadow-sm space-y-6"
+  >
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
-<%- include("../partials/footer") %>
+    <div>
+      <label class="block mb-1 font-medium">Title</label>
+      <input 
+        type="text" 
+        name="title" 
+        required
+        class="w-full p-3 border rounded-lg"
+      >
+    </div>
+
+    <div>
+      <label class="block mb-1 font-medium">Body</label>
+      <textarea 
+        name="body" 
+        required
+        class="w-full p-3 border rounded-lg h-40"
+      ></textarea>
+    </div>
+
+    <!-- Hidden fields for category + subcategory slugs -->
+    <input type="hidden" name="category_slug" value="<%= category.slug %>">
+    <% if (subcategory) { %>
+      <input type="hidden" name="subcategory_slug" value="<%= subcategory.slug %>">
+    <% } %>
+
+    <button 
+      type="submit" 
+      class="w-full bg-pink-600 hover:bg-pink-500 text-white py-3 rounded-lg text-lg font-medium"
+    >
+      Save Draft
+    </button>
+  </form>
+
+</div>
+
+</body>
+</html>
 
