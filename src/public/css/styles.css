@@ -981,3 +981,9 @@ video {
   --tw-ring-color: rgb(99 102 241 / var(--tw-ring-opacity, 1));
 }
 
+/* Fix invisible dropdown text */
+select, option {
+  color: black !important;
+  background-color: white !important;
+}
+

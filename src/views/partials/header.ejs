@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <title><%= title %></title>
-  <link href="/public/styles.css" rel="stylesheet">
+  <link href="/css/styles.css" rel="stylesheet">
+
 </head>
 
 <body class="bg-white text-gray-900">
@@ -18,8 +19,14 @@
     <!-- Desktop Nav -->
     <div class="hidden md:flex items-center gap-12 text-lg font-medium">
       <a href="/" class="hover:text-pink-600 transition">Home</a>
-      <a href="/login" class="hover:text-pink-600 transition">Login</a>
-      <a href="/signup" class="hover:text-pink-600 transition">Sign Up</a>
+
+      <% if (!userId) { %>
+        <a href="/login" class="hover:text-pink-600 transition">Login</a>
+        <a href="/signup" class="hover:text-pink-600 transition">Sign Up</a>
+      <% } else { %>
+        <a href="/dashboard" class="hover:text-pink-600 transition">Dashboard</a>
+        <a href="/logout" class="hover:text-pink-600 transition">Logout</a>
+      <% } %>
     </div>
 
     <!-- Mobile Menu Button -->
@@ -31,8 +38,14 @@
   <!-- Mobile Menu -->
   <div id="mobileMenu" class="hidden md:hidden px-6 pb-6 flex flex-col gap-4 text-lg font-medium">
     <a href="/" class="hover:text-pink-600 transition">Home</a>
-    <a href="/login" class="hover:text-pink-600 transition">Login</a>
-    <a href="/signup" class="hover:text-pink-600 transition">Sign Up</a>
+
+    <% if (!userId) { %>
+      <a href="/login" class="hover:text-pink-600 transition">Login</a>
+      <a href="/signup" class="hover:text-pink-600 transition">Sign Up</a>
+    <% } else { %>
+      <a href="/dashboard" class="hover:text-pink-600 transition">Dashboard</a>
+      <a href="/logout" class="hover:text-pink-600 transition">Logout</a>
+    <% } %>
   </div>
 </nav>
 

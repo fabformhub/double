@@ -100,35 +100,61 @@ app.set("layout", "layouts/main");
 // ROUTES (ORDER MATTERS!)
 // -----------------------------
 
+// IMPORT ROUTES
+import apiRoutes from "./routes/api.js";
 import authRoutes from "./routes/auth.js";
-import dashboardRoutes from "./routes/dashboard.js";
+import homeRouter from "./routes/home.js";
+import locationRoutes from "./routes/locations.js";
+import adsRoutes from "./routes/ads.js";
 import messagesRoutes from "./routes/messages.js";
 import adminRoutes from "./routes/admin.js";
-import homeRouter from "./routes/home.js";
-import adsRoutes from "./routes/ads.js";
-import locationRoutes from "./routes/locations.js";   // <-- YOU WERE MISSING THIS
+import dashboardRoutes from "./routes/dashboard.js";
+import startRoutes from "./routes/start.js";
 
-// AUTH FIRST
+// -----------------------------
+// API MUST COME FIRST
+// -----------------------------
+app.use("/api", apiRoutes);
+
+// -----------------------------
+// AUTH
+// -----------------------------
 app.use("/", authRoutes);
 
-// HOME ROUTER (city list)
+// -----------------------------
+// HOME (city list)
+// -----------------------------
 app.use("/", homeRouter);
 
+// -----------------------------
 // LOCATION + CATEGORY ROUTES
-// MUST COME BEFORE ADS ROUTES
+// -----------------------------
 app.use("/", locationRoutes);
 
+// -----------------------------
 // ADS ROUTES
+// -----------------------------
 app.use("/", adsRoutes);
 
+// -----------------------------
 // MESSAGES
+// -----------------------------
 app.use("/messages", messagesRoutes);
 
+// -----------------------------
 // ADMIN
+// -----------------------------
 app.use("/admin", adminRoutes);
 
+// -----------------------------
 // DASHBOARD
+// -----------------------------
 app.use("/dashboard", dashboardRoutes);
+
+// -----------------------------
+// START PAGE
+// -----------------------------
+app.use("/", startRoutes);
 
 // -----------------------------
 // 404 HANDLER
