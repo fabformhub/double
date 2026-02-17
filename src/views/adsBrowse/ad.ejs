@@ -1,0 +1,62 @@
+<%- include("../partials/breadcrumbs") %>
+
+<h1 class="text-3xl font-bold mb-6 text-pink-300 tracking-tight">
+  <%= ad.title %>
+</h1>
+
+<div class="space-y-6">
+
+  <!-- Ad Body -->
+  <div 
+    class="
+      nookyup-hover
+      p-6 rounded-xl
+      bg-slate-900/30 border border-slate-800/50 backdrop-blur-xl
+      text-slate-200 leading-relaxed text-lg
+
+      transition-all duration-500
+
+      hover:scale-[1.03]
+      hover:bg-gradient-to-r
+      hover:from-pink-600/20
+      hover:via-fuchsia-500/10
+      hover:to-purple-600/20
+      hover:shadow-[0_0_45px_rgba(236,72,153,0.7)]
+      hover:border-pink-500/70
+      hover:text-pink-200
+    "
+  >
+    <%= ad.body %>
+  </div>
+
+  <!-- Meta Info -->
+  <div 
+    class="
+      nookyup-hover
+      p-6 rounded-xl
+      bg-slate-900/30 border border-slate-800/50 backdrop-blur-xl
+      text-slate-300
+
+      transition-all duration-500
+
+      hover:scale-[1.03]
+      hover:bg-gradient-to-r
+      hover:from-pink-600/20
+      hover:via-fuchsia-500/10
+      hover:to-purple-600/20
+      hover:shadow-[0_0_45px_rgba(236,72,153,0.7)]
+      hover:border-pink-500/70
+      hover:text-pink-200
+    "
+  >
+    <p><strong class="text-pink-300">Posted:</strong> <%= ad.created_at %></p>
+    <p><strong class="text-pink-300">Location:</strong> <%= ad.location_slug %></p>
+    <p><strong class="text-pink-300">Category:</strong> <%= ad.category_slug %></p>
+
+    <% if (ad.subcategory_slug) { %>
+      <p><strong class="text-pink-300">Subcategory:</strong> <%= ad.subcategory_slug %></p>
+    <% } %>
+  </div>
+
+</div>
+

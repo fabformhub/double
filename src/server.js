@@ -43,7 +43,15 @@ app.use(
 );
 
 // -----------------------------
-// FLASH HELPER
+// DEFAULT PAGE TITLE
+// -----------------------------
+app.use((req, res, next) => {
+  res.locals.title = "NookyUp"; // fallback title
+  next();
+});
+
+// -----------------------------
+// FLASH HELPER (CUSTOM)
 // -----------------------------
 app.use((req, res, next) => {
   req.flash = function (msg) {
@@ -89,10 +97,11 @@ app.use((req, res, next) => {
 });
 
 // -----------------------------
-// VIEW ENGINE
+// VIEW ENGINE + LAYOUTS
 // -----------------------------
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+
 app.use(expressLayouts);
 app.set("layout", "layouts/main");
 
@@ -101,61 +110,33 @@ app.set("layout", "layouts/main");
 // -----------------------------
 
 // IMPORT ROUTES
-import apiRoutes from "./routes/api.js";
-import authRoutes from "./routes/auth.js";
-import homeRoutes from "./routes/home.js";
-import locationRoutes from "./routes/locations.js";
-import adsRoutes from "./routes/ads.js";
-import messagesRoutes from "./routes/messages.js";
-import adminRoutes from "./routes/admin.js";
-import dashboardRoutes from "./routes/dashboard.js";
-import startRoutes from "./routes/start.js";
+import authRoutes from "./routes/auth.js";            // /signup, /login, /logout
+import dashboardRoutes from "./routes/dashboard.js";  // /dashboard
+import adminRoutes from "./routes/admin.js";          // /admin
+import messagesRoutes from "./routes/messages.js";    // /messages
+import apiRoutes from "./routes/api.js";              // /api/*
+import adsBrowseRoutes from "./routes/adsBrowse.js";
+
 
 // -----------------------------
-// API MUST COME FIRST
+// SYSTEM ROUTES (STATIC)
+// -----------------------------
+app.use("/", authRoutes);          // /signup, /login, /logout
+app.use("/dashboard", dashboardRoutes);
+app.use("/admin", adminRoutes);
+app.use("/messages", messagesRoutes);
+
+
+// -----------------------------
+// API ROUTES
 // -----------------------------
 app.use("/api", apiRoutes);
 
 // -----------------------------
-// AUTH
+// 
 // -----------------------------
-app.use("/", authRoutes);
 
-// -----------------------------
-// HOME (city list)
-// -----------------------------
-app.use("/", homeRoutes);
-
-// -----------------------------
-// LOCATION ROUTES
-// -----------------------------
-app.use("/", locationRoutes);
-
-// -----------------------------
-// ADS ROUTES (category + subcategory)
-// -----------------------------
-app.use("/", adsRoutes);
-
-// -----------------------------
-// MESSAGES
-// -----------------------------
-app.use("/messages", messagesRoutes);
-
-// -----------------------------
-// ADMIN
-// -----------------------------
-app.use("/admin", adminRoutes);
-
-// -----------------------------
-// DASHBOARD
-// -----------------------------
-app.use("/dashboard", dashboardRoutes);
-
-// -----------------------------
-// START PAGE
-// -----------------------------
-app.use("/", startRoutes);
-
+app.use("/", adsBrowseRoutes);
 // -----------------------------
 // 404 HANDLER
 // -----------------------------

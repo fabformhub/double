@@ -1,23 +1,18 @@
 import db from "../config/db.js";
 
-export function showHome(req, res) {
-  const locations = db.prepare(`
-    SELECT * FROM locations
-    ORDER BY country_code, city_name
-  `).all();
+export const home = (req, res) => {
+  try {
+    const countries = db.prepare(`
+      SELECT DISTINCT country_code
+      FROM locations
+      ORDER BY country_code ASC
+    `).all();
 
-  const grouped = {
-    uk: [],
-    ie: []
-  };
+    res.render("home", { countries });
 
-  locations.forEach(loc => {
-    grouped[loc.country_code].push(loc);
-  });
-
-  res.render("home", {
-    title: "Choose Your Location",
-    locations: grouped
-  });
-}
+  } catch (err) {
+    console.error("Home controller error:", err);
+    res.status(500).send("Server error");
+  }
+};
 

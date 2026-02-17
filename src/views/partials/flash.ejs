@@ -1,7 +1,24 @@
 <% if (messages && messages.length > 0) { %>
-  <div class="space-y-2">
+  <div class="space-y-3">
     <% messages.forEach(msg => { %>
-      <div class="bg-slate-800 border border-slate-700 p-3 rounded text-slate-200">
+      <div 
+        class="
+          nookyup-hover
+          p-4 rounded-xl
+          bg-slate-900/40 border border-slate-800/60 backdrop-blur-xl
+          text-pink-200 font-medium tracking-wide
+
+          transition-all duration-500
+
+          hover:scale-[1.03]
+          hover:bg-gradient-to-r
+          hover:from-pink-600/20
+          hover:via-fuchsia-500/10
+          hover:to-purple-600/20
+          hover:shadow-[0_0_35px_rgba(236,72,153,0.6)]
+          hover:border-pink-500/70
+        "
+      >
         <%= msg %>
       </div>
     <% }) %>

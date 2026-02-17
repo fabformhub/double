@@ -1,26 +1,74 @@
+<h1 class="text-3xl font-bold mb-8 text-pink-300 tracking-tight">
+  Ads in <%= location.city_name %>
+</h1>
 
-<h1 class="page-title">Ads in <%= location.city_name %></h1>
+<div class="space-y-6">
 
-<div class="ads-list">
   <% if (ads.length === 0) { %>
-    <p>No ads posted in this location yet.</p>
+
+    <p class="text-slate-400 text-lg">
+      No ads posted in this location yet.
+    </p>
+
   <% } else { %>
-    <% ads.forEach(ad => { %>
-      <div class="ad-card">
-        <h2>
-          <a href="/<%= location.country_code %>/<%= location.slug %>/ads/<%= ad.id %>">
-            <%= ad.title %>
-          </a>
-        </h2>
-        <p><%= ad.body.substring(0, 120) %>...</p>
-        <small>Posted by <%= ad.username %></small>
-      </div>
-    <% }) %>
+
+    <div class="flex flex-col gap-6">
+      <% ads.forEach(ad => { %>
+        <div 
+          class="
+            nookyup-hover
+            p-6 rounded-xl
+            bg-slate-900/30 border border-slate-800/60 backdrop-blur-xl
+            text-slate-200 flex flex-col gap-3
+
+            transition-all duration-500
+            hover:scale-[1.03]
+            hover:bg-gradient-to-r
+            hover:from-pink-600/20
+            hover:via-fuchsia-500/10
+            hover:to-purple-600/20
+            hover:shadow-[0_0_45px_rgba(236,72,153,0.7)]
+            hover:border-pink-500/70
+          "
+        >
+          <h2 class="text-xl font-semibold tracking-wide">
+            <a 
+              href="/<%= location.country_code %>/<%= location.slug %>/ads/<%= ad.id %>"
+              class="hover:text-pink-300 transition"
+            >
+              <%= ad.title %>
+            </a>
+          </h2>
+
+          <p class="text-slate-400">
+            <%= ad.body.substring(0, 120) %>...
+          </p>
+
+          <small class="text-slate-500">
+            Posted by <%= ad.username %>
+          </small>
+        </div>
+      <% }) %>
+    </div>
+
   <% } %>
+
 </div>
 
-<a class="btn btn-primary"
-   href="/<%= location.country_code %>/<%= location.slug %>/ads/new">
+<a 
+  class="
+    nookyup-hover
+    inline-block mt-10 px-6 py-3 rounded-lg text-lg
+    text-pink-300 border border-pink-500/40
+    bg-slate-900/40 backdrop-blur-xl
+    transition-all duration-500
+    hover:scale-[1.05]
+    hover:border-pink-500/80
+    hover:text-pink-200
+    hover:shadow-[0_0_25px_rgba(236,72,153,0.5)]
+  "
+  href="/<%= location.country_code %>/<%= location.slug %>/ads/new"
+>
   Post New Ad
 </a>
 

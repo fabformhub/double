@@ -1,18 +1,91 @@
 <%- include("../partials/header", { title }) %>
 
-<h1>Edit Ad in <%= location.city_name %></h1>
+<h1 class="text-3xl font-bold mb-8 text-pink-300 tracking-tight">
+  Edit Ad in <%= location.city_name %>
+</h1>
 
-<form action="/<%= location.country_code %>/<%= location.slug %>/ads/<%= ad.id %>/edit" method="POST">
-  <label>Title</label>
-  <input type="text" name="title" value="<%= ad.title %>" required>
+<form 
+  action="/<%= location.country_code %>/<%= location.slug %>/ads/<%= ad.id %>/edit" 
+  method="POST"
+  class="
+    nookyup-hover
+    max-w-3xl p-8 rounded-2xl
+    bg-slate-900/40 border border-slate-800/60 backdrop-blur-xl
+    text-slate-200 space-y-6
 
-  <label>Body</label>
-  <textarea name="body" required><%= ad.body %></textarea>
+    transition-all duration-500
+    hover:scale-[1.02]
+    hover:border-pink-500/70
+    hover:shadow-[0_0_45px_rgba(236,72,153,0.6)]
+  "
+>
 
-  <label>Category</label>
-  <input type="text" name="category" value="<%= ad.category %>">
+  <!-- Title -->
+  <div class="flex flex-col gap-2">
+    <label class="text-pink-300 font-medium tracking-wide">Title</label>
+    <input 
+      type="text" 
+      name="title" 
+      value="<%= ad.title %>" 
+      required
+      class="
+        w-full px-4 py-3 rounded-lg
+        bg-slate-900/60 border border-slate-700 text-slate-200
+        focus:border-pink-500 focus:ring-2 focus:ring-pink-500/40
+        transition-all duration-300
+      "
+    >
+  </div>
 
-  <button type="submit" class="btn btn-primary">Update Ad</button>
+  <!-- Body -->
+  <div class="flex flex-col gap-2">
+    <label class="text-pink-300 font-medium tracking-wide">Body</label>
+    <textarea 
+      name="body" 
+      required
+      class="
+        w-full h-40 px-4 py-3 rounded-lg
+        bg-slate-900/60 border border-slate-700 text-slate-200
+        focus:border-pink-500 focus:ring-2 focus:ring-pink-500/40
+        transition-all duration-300
+      "
+    ><%= ad.body %></textarea>
+  </div>
+
+  <!-- Category -->
+  <div class="flex flex-col gap-2">
+    <label class="text-pink-300 font-medium tracking-wide">Category</label>
+    <input 
+      type="text" 
+      name="category" 
+      value="<%= ad.category %>"
+      class="
+        w-full px-4 py-3 rounded-lg
+        bg-slate-900/60 border border-slate-700 text-slate-200
+        focus:border-pink-500 focus:ring-2 focus:ring-pink-500/40
+        transition-all duration-300
+      "
+    >
+  </div>
+
+  <!-- Submit Button -->
+  <button 
+    type="submit"
+    class="
+      nookyup-hover
+      mt-6 px-6 py-3 rounded-lg text-lg font-medium
+      text-pink-300 border border-pink-500/40
+      bg-slate-900/40 backdrop-blur-xl
+      transition-all duration-500
+      hover:scale-[1.05]
+      hover:border-pink-500/80
+      hover:text-pink-200
+      hover:shadow-[0_0_25px_rgba(236,72,153,0.5)]
+    "
+  >
+    Update Ad
+  </button>
+
 </form>
 
 <%- include("../partials/footer") %>

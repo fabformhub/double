@@ -1,0 +1,101 @@
+<nav class="mb-8 text-sm text-slate-400">
+  <ul class="flex flex-wrap items-center gap-2">
+
+    <!-- Home -->
+    <li>
+      <a 
+        href="/" 
+        class="
+          nookyup-hover
+          text-pink-300 
+          hover:text-pink-200 
+          transition-all duration-300
+        "
+      >
+        Home
+      </a>
+    </li>
+
+    <!-- Country -->
+    <% if (typeof country !== "undefined") { %>
+      <li class="text-slate-600">/</li>
+      <li>
+        <a 
+          href="/<%= country %>" 
+          class="
+            nookyup-hover
+            text-pink-300 
+            hover:text-pink-200 
+            transition-all duration-300
+          "
+        >
+          <%= country.toUpperCase() %>
+        </a>
+      </li>
+    <% } %>
+
+    <!-- City -->
+    <% if (typeof city !== "undefined") { %>
+      <li class="text-slate-600">/</li>
+      <li>
+        <a 
+          href="/<%= country %>/<%= city %>" 
+          class="
+            nookyup-hover
+            text-pink-300 
+            hover:text-pink-200 
+            transition-all duration-300
+          "
+        >
+          <%= (typeof cityName !== "undefined" ? cityName : city) %>
+        </a>
+      </li>
+    <% } %>
+
+    <!-- Category -->
+    <% if (typeof category !== "undefined") { %>
+      <li class="text-slate-600">/</li>
+      <li>
+        <a 
+          href="/<%= country %>/<%= city %>/<%= category %>" 
+          class="
+            nookyup-hover
+            text-pink-300 
+            hover:text-pink-200 
+            transition-all duration-300
+          "
+        >
+          <%= (typeof categoryName !== "undefined" ? categoryName : category) %>
+        </a>
+      </li>
+    <% } %>
+
+    <!-- Subcategory -->
+    <% if (typeof subcategory !== "undefined") { %>
+      <li class="text-slate-600">/</li>
+      <li>
+        <a 
+          href="/<%= country %>/<%= city %>/<%= category %>/<%= subcategory %>" 
+          class="
+            nookyup-hover
+            text-pink-300 
+            hover:text-pink-200 
+            transition-all duration-300
+          "
+        >
+          <%= (typeof subcategoryName !== "undefined" ? subcategoryName : subcategory) %>
+        </a>
+      </li>
+    <% } %>
+
+    <!-- Ad title -->
+    <% if (typeof ad !== "undefined") { %>
+      <li class="text-slate-600">/</li>
+      <li class="text-slate-300">
+        <%= ad.title %>
+      </li>
+    <% } %>
+
+  </ul>
+</nav>
+

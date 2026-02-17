@@ -1,50 +1,127 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title><%= title %></title>
-  <link href="/css/styles.css" rel="stylesheet">
-
-</head>
-
-<body class="bg-white text-gray-900">
-
-<nav class="w-full border-b border-gray-200 bg-white">
+<nav class="w-full border-b border-slate-800/60 bg-slate-900/40 backdrop-blur-xl shadow-lg shadow-black/20">
   <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
 
     <!-- Brand -->
-    <a href="/" class="text-3xl font-semibold tracking-tight text-pink-600">
+    <a 
+      href="/" 
+      class="
+        nookyup-hover
+        text-3xl font-extrabold tracking-tight 
+        text-pink-400 
+        transition-all duration-500
+        hover:scale-[1.05]
+        hover:text-pink-300
+      "
+    >
       NookyUp
     </a>
 
     <!-- Desktop Nav -->
-    <div class="hidden md:flex items-center gap-12 text-lg font-medium">
-      <a href="/" class="hover:text-pink-600 transition">Home</a>
+    <div class="hidden md:flex items-center gap-10 text-lg font-medium text-slate-300">
+
+      <a 
+        href="/" 
+        class="
+          nookyup-hover
+          px-2 py-1 rounded-lg
+          transition-all duration-500
+          hover:text-pink-300
+          hover:scale-[1.05]
+        "
+      >
+        Home
+      </a>
 
       <% if (!userId) { %>
-        <a href="/login" class="hover:text-pink-600 transition">Login</a>
-        <a href="/signup" class="hover:text-pink-600 transition">Sign Up</a>
+
+        <a 
+          href="/login" 
+          class="
+            nookyup-hover
+            px-2 py-1 rounded-lg
+            transition-all duration-500
+            hover:text-pink-300
+            hover:scale-[1.05]
+          "
+        >
+          Login
+        </a>
+
+        <a 
+          href="/signup" 
+          class="
+            nookyup-hover
+            px-2 py-1 rounded-lg
+            transition-all duration-500
+            hover:text-pink-300
+            hover:scale-[1.05]
+          "
+        >
+          Sign Up
+        </a>
+
       <% } else { %>
-        <a href="/dashboard" class="hover:text-pink-600 transition">Dashboard</a>
-        <a href="/logout" class="hover:text-pink-600 transition">Logout</a>
+
+        <a 
+          href="/dashboard" 
+          class="
+            nookyup-hover
+            px-2 py-1 rounded-lg
+            transition-all duration-500
+            hover:text-pink-300
+            hover:scale-[1.05]
+          "
+        >
+          Dashboard
+        </a>
+
+        <a 
+          href="/logout" 
+          class="
+            nookyup-hover
+            px-2 py-1 rounded-lg
+            transition-all duration-500
+            hover:text-pink-300
+            hover:scale-[1.05]
+          "
+        >
+          Logout
+        </a>
+
       <% } %>
     </div>
 
     <!-- Mobile Menu Button -->
-    <button id="mobileMenuBtn" class="md:hidden text-3xl text-gray-700">
+    <button 
+      id="mobileMenuBtn" 
+      class="
+        md:hidden text-3xl text-slate-300 
+        transition-all duration-300 
+        hover:text-pink-400
+        hover:scale-[1.1]
+      "
+    >
       ☰
     </button>
   </div>
 
   <!-- Mobile Menu -->
-  <div id="mobileMenu" class="hidden md:hidden px-6 pb-6 flex flex-col gap-4 text-lg font-medium">
-    <a href="/" class="hover:text-pink-600 transition">Home</a>
+  <div 
+    id="mobileMenu" 
+    class="
+      hidden md:hidden px-6 pb-6 flex flex-col gap-4 text-lg font-medium 
+      text-slate-300 bg-slate-900/80 backdrop-blur-xl 
+      border-t border-slate-800/60
+    "
+  >
+    <a href="/" class="nookyup-hover px-2 py-1 rounded-lg hover:text-pink-300 transition-all duration-500">Home</a>
 
     <% if (!userId) { %>
-      <a href="/login" class="hover:text-pink-600 transition">Login</a>
-      <a href="/signup" class="hover:text-pink-600 transition">Sign Up</a>
+      <a href="/login" class="nookyup-hover px-2 py-1 rounded-lg hover:text-pink-300 transition-all duration-500">Login</a>
+      <a href="/signup" class="nookyup-hover px-2 py-1 rounded-lg hover:text-pink-300 transition-all duration-500">Sign Up</a>
     <% } else { %>
-      <a href="/dashboard" class="hover:text-pink-600 transition">Dashboard</a>
-      <a href="/logout" class="hover:text-pink-600 transition">Logout</a>
+      <a href="/dashboard" class="nookyup-hover px-2 py-1 rounded-lg hover:text-pink-300 transition-all duration-500">Dashboard</a>
+      <a href="/logout" class="nookyup-hover px-2 py-1 rounded-lg hover:text-pink-300 transition-all duration-500">Logout</a>
     <% } %>
   </div>
 </nav>
@@ -53,7 +130,7 @@
   const btn = document.getElementById("mobileMenuBtn");
   const menu = document.getElementById("mobileMenu");
 
-  btn.addEventListener("click", () => {
+  btn?.addEventListener("click", () => {
     menu.classList.toggle("hidden");
   });
 </script>

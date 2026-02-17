@@ -1,71 +1,110 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title><%= title %></title>
-  <link href="/css/styles.css" rel="stylesheet">
-</head>
-
-<body class="bg-gray-100 text-gray-900">
+<%- include("../partials/header", { title }) %>
 
 <div class="max-w-3xl mx-auto py-12 px-6">
 
-  <h1 class="text-3xl font-semibold mb-6">
+  <h1 class="text-3xl font-bold mb-8 text-pink-300 tracking-tight">
     Create Ad in <%= location.city_name %>
   </h1>
 
-  <div class="mb-8 bg-white border rounded-lg p-6 shadow-sm">
-    <p class="mb-1"><strong>Country:</strong> <%= country %></p>
-    <p class="mb-1"><strong>City:</strong> <%= location.city_name %></p>
-    <p class="mb-1"><strong>Category:</strong> <%= category.name %></p>
+  <!-- Location + Category Info -->
+  <div 
+    class="
+      nookyup-hover
+      mb-10 p-6 rounded-xl
+      bg-slate-900/40 border border-slate-800/60 backdrop-blur-xl
+      text-slate-300 space-y-1
+
+      transition-all duration-500
+      hover:scale-[1.02]
+      hover:border-pink-500/70
+      hover:shadow-[0_0_35px_rgba(236,72,153,0.6)]
+    "
+  >
+    <p><strong class="text-pink-300">Country:</strong> <%= country %></p>
+    <p><strong class="text-pink-300">City:</strong> <%= location.city_name %></p>
+    <p><strong class="text-pink-300">Category:</strong> <%= category.name %></p>
 
     <% if (subcategory) { %>
-      <p class="mb-1"><strong>Subcategory:</strong> <%= subcategory.name %></p>
+      <p><strong class="text-pink-300">Subcategory:</strong> <%= subcategory.name %></p>
     <% } %>
   </div>
 
+  <!-- Form -->
   <form 
     action="/<%= country %>/<%= city %>/<%= category.slug %>/<%= subcategory ? subcategory.slug : '' %>/ads/new" 
     method="POST"
-    class="bg-white border rounded-lg p-6 shadow-sm space-y-6"
+    class="
+      nookyup-hover
+      p-8 rounded-2xl
+      bg-slate-900/40 border border-slate-800/60 backdrop-blur-xl
+      text-slate-200 space-y-6
+
+      transition-all duration-500
+      hover:scale-[1.02]
+      hover:border-pink-500/70
+      hover:shadow-[0_0_45px_rgba(236,72,153,0.6)]
+    "
   >
     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
-    <div>
-      <label class="block mb-1 font-medium">Title</label>
+    <!-- Title -->
+    <div class="flex flex-col gap-2">
+      <label class="text-pink-300 font-medium tracking-wide">Title</label>
       <input 
         type="text" 
         name="title" 
         required
-        class="w-full p-3 border rounded-lg"
+        class="
+          w-full px-4 py-3 rounded-lg
+          bg-slate-900/60 border border-slate-700 text-slate-200
+          focus:border-pink-500 focus:ring-2 focus:ring-pink-500/40
+          transition-all duration-300
+        "
       >
     </div>
 
-    <div>
-      <label class="block mb-1 font-medium">Body</label>
+    <!-- Body -->
+    <div class="flex flex-col gap-2">
+      <label class="text-pink-300 font-medium tracking-wide">Body</label>
       <textarea 
         name="body" 
         required
-        class="w-full p-3 border rounded-lg h-40"
+        class="
+          w-full h-40 px-4 py-3 rounded-lg
+          bg-slate-900/60 border border-slate-700 text-slate-200
+          focus:border-pink-500 focus:ring-2 focus:ring-pink-500/40
+          transition-all duration-300
+        "
       ></textarea>
     </div>
 
-    <!-- Hidden fields for category + subcategory slugs -->
+    <!-- Hidden fields -->
     <input type="hidden" name="category_slug" value="<%= category.slug %>">
     <% if (subcategory) { %>
       <input type="hidden" name="subcategory_slug" value="<%= subcategory.slug %>">
     <% } %>
 
+    <!-- Submit Button -->
     <button 
-      type="submit" 
-      class="w-full bg-pink-600 hover:bg-pink-500 text-white py-3 rounded-lg text-lg font-medium"
+      type="submit"
+      class="
+        nookyup-hover
+        w-full mt-4 px-6 py-3 rounded-lg text-lg font-medium
+        text-pink-300 border border-pink-500/40
+        bg-slate-900/40 backdrop-blur-xl
+        transition-all duration-500
+        hover:scale-[1.05]
+        hover:border-pink-500/80
+        hover:text-pink-200
+        hover:shadow-[0_0_25px_rgba(236,72,153,0.5)]
+      "
     >
       Save Draft
     </button>
+
   </form>
 
 </div>
 
-</body>
-</html>
+<%- include("../partials/footer") %>
 

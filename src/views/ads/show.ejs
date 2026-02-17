@@ -1,14 +1,47 @@
+<h1 class="text-3xl font-bold mb-8 text-pink-300 tracking-tight">
+  <%= ad.title %>
+</h1>
 
-<h1><%= ad.title %></h1>
+<div 
+  class="
+    nookyup-hover
+    p-8 rounded-2xl mb-10
+    bg-slate-900/40 border border-slate-800/60 backdrop-blur-xl
+    text-slate-200 space-y-6
 
-<p><%= ad.body %></p>
+    transition-all duration-500
+    hover:scale-[1.02]
+    hover:border-pink-500/70
+    hover:shadow-[0_0_45px_rgba(236,72,153,0.6)]
+  "
+>
+  <p class="text-lg leading-relaxed text-slate-300">
+    <%= ad.body %>
+  </p>
 
-<p class="meta">
-  Posted in <%= location.city_name %> by <%= ad.username %>
-</p>
+  <p class="text-sm text-slate-400">
+    Posted in 
+    <span class="text-pink-300"><%= location.city_name %></span> 
+    by 
+    <span class="text-pink-300"><%= ad.username %></span>
+  </p>
+</div>
 
-<a href="/<%= location.country_code %>/<%= location.slug %>/ads">
-  Back to <%= location.city_name %> ads
+<a 
+  href="/<%= location.country_code %>/<%= location.slug %>/ads"
+  class="
+    nookyup-hover
+    inline-block px-5 py-3 rounded-lg text-lg
+    text-pink-300 border border-pink-500/40
+    bg-slate-900/40 backdrop-blur-xl
+    transition-all duration-500
+    hover:scale-[1.05]
+    hover:border-pink-500/80
+    hover:text-pink-200
+    hover:shadow-[0_0_25px_rgba(236,72,153,0.5)]
+  "
+>
+  ← Back to <%= location.city_name %> ads
 </a>
 
 <%- include("../partials/footer") %>

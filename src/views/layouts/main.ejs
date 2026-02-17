@@ -1,30 +1,66 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-slate-950 text-slate-200">
+<html 
+  lang="en" 
+  class="h-full bg-gradient-to-br from-slate-950 via-slate-900 to-black text-slate-200 antialiased"
+>
 <head>
   <meta charset="UTF-8">
   <title><%= title %></title>
+
+  <!-- Tailwind -->
   <link rel="stylesheet" href="/css/styles.css">
+
+  <!-- Alpine.js -->
+  <script src="https://unpkg.com/alpinejs" defer></script>
+
+  <!-- Smooth fade-in -->
+  <style>
+    .fade-in {
+      animation: fadeIn 0.4s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
 
 <body class="min-h-screen flex flex-col">
 
+  <!-- HEADER (no extra wrapper) -->
   <%- include("../partials/header") %>
 
-  <div class="max-w-4xl mx-auto w-full p-4">
+  <!-- FLASH MESSAGES -->
+  <div class="max-w-4xl mx-auto w-full p-4 fade-in">
     <%- include("../partials/flash") %>
   </div>
 
+  <!-- ADMIN NAV -->
   <% if (typeof showAdminNav !== "undefined" && showAdminNav) { %>
-  <div class="max-w-4xl mx-auto w-full p-4">
-    <%- include("../partials/admin-nav") %>
-  </div>
-<% } %>
+    <div class="max-w-4xl mx-auto w-full p-4 fade-in">
+      <%- include("../partials/admin-nav") %>
+    </div>
+  <% } %>
 
+  <!-- MAIN CONTENT -->
+  <main class="max-w-4xl mx-auto w-full p-6 fade-in flex-1">
+    <div 
+      class="
+        nookyup-hover
+        bg-slate-900/40 backdrop-blur-xl border border-slate-800/50 
+        rounded-2xl p-8 shadow-xl shadow-black/40
 
-  <main class="max-w-4xl mx-auto w-full p-6">
-    <%- body %>
+        transition-all duration-500
+        hover:scale-[1.01]
+        hover:border-pink-500/70
+        hover:shadow-[0_0_45px_rgba(236,72,153,0.5)]
+      "
+    >
+      <%- body %>
+    </div>
   </main>
 
+  <!-- FOOTER (no double wrapper) -->
   <%- include("../partials/footer") %>
 
 </body>

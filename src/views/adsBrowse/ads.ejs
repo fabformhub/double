@@ -1,0 +1,96 @@
+<%- include("../partials/breadcrumbs") %>
+
+<h1 class="text-2xl font-bold mb-6 text-pink-300 tracking-tight">
+  Ads in <%= subcategory %>
+</h1>
+
+<% if (ads.length === 0) { %>
+  <p class="text-slate-400">No ads found in this subcategory.</p>
+<% } else { %>
+  <ul class="space-y-5">
+    <% ads.forEach(ad => { %>
+      <li>
+        <a 
+          href="/<%= country %>/<%= city %>/<%= category %>/<%= subcategory %>/<%= ad.id %>"
+          class="
+            nookyup-hover
+            block p-6 rounded-xl
+            bg-slate-900/30 border border-slate-800/50 backdrop-blur-xl
+            text-slate-200
+
+            transition-all duration-500
+
+            hover:scale-[1.05]
+            hover:bg-gradient-to-r
+            hover:from-pink-600/30
+            hover:via-fuchsia-500/20
+            hover:to-purple-600/30
+            hover:shadow-[0_0_55px_rgba(236,72,153,0.8)]
+            hover:border-pink-500/80
+            hover:text-pink-200
+          "
+        >
+          <h3 class="text-xl font-semibold tracking-wide mb-2">
+            <%= ad.title %>
+          </h3>
+
+          <p class="text-slate-400 leading-relaxed">
+            <%= ad.body.substring(0, 160) %>...
+          </p>
+
+          <small class="text-slate-500 block mt-3">
+            Posted: <%= ad.created_at %>
+          </small>
+        </a>
+      </li>
+    <% }) %>
+  </ul>
+<% } %>
+
+<!-- Pagination -->
+<div class="flex items-center justify-between mt-10 text-slate-300">
+
+  <% if (page > 1) { %>
+    <a 
+      href="?page=<%= page - 1 %>"
+      class="
+        nookyup-hover
+        px-4 py-2 rounded-lg border border-slate-700
+        bg-slate-900/30 backdrop-blur-xl
+        transition-all duration-300
+        hover:scale-[1.05]
+        hover:border-pink-500/70
+        hover:text-pink-300
+      "
+    >
+      Previous
+    </a>
+  <% } else { %>
+    <span></span>
+  <% } %>
+
+  <span class="text-slate-500">
+    Page <%= page %> of <%= totalPages %>
+  </span>
+
+  <% if (page < totalPages) { %>
+    <a 
+      href="?page=<%= page + 1 %>"
+      class="
+        nookyup-hover
+        px-4 py-2 rounded-lg border border-slate-700
+        bg-slate-900/30 backdrop-blur-xl
+        transition-all duration-300
+        hover:scale-[1.05]
+        hover:border-pink-500/70
+        hover:text-pink-300
+      "
+    >
+      Next
+    </a>
+  <% } else { %>
+    <span></span>
+  <% } %>
+
+</div>
+

@@ -2,13 +2,14 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import Database from "better-sqlite3";
-import db, { DB_PATH } from "./db.js"; // <-- unified import
+import db, { DB_PATH } from "./db.js"; // unified import
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // SQL file paths
 const schemaPath = path.join(__dirname, "schema.sql");
+const seedCountriesPath = path.join(__dirname, "seed_countries.sql");
 const seedLocationsPath = path.join(__dirname, "seed_locations.sql");
 const seedCategoriesPath = path.join(__dirname, "seed_categories.sql");
 const seedSubcategoriesPath = path.join(__dirname, "seed_subcategories.sql");
@@ -32,6 +33,7 @@ function runSQL(filePath) {
 
 // Run schema + seeds
 runSQL(schemaPath);
+runSQL(seedCountriesPath);      // <-- NEW
 runSQL(seedLocationsPath);
 runSQL(seedCategoriesPath);
 runSQL(seedSubcategoriesPath);

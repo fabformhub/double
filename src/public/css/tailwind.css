@@ -1,4 +1,31 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@layer utilities {
+  .nookyup-hover {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .nookyup-hover::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 150%;
+    height: 100%;
+    background: linear-gradient(
+      120deg,
+      transparent 0%,
+      rgba(236, 72, 153, 0.25) 50%,
+      transparent 100%
+    );
+    transform: skewX(-20deg);
+    transition: all 0.5s ease;
+  }
+
+  .nookyup-hover:hover::after {
+    left: 150%;
+  }
+}
 

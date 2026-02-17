@@ -7,10 +7,19 @@ CREATE TABLE IF NOT EXISTS users (
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+-- COUNTRIES
+CREATE TABLE IF NOT EXISTS countries (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  country_code TEXT NOT NULL UNIQUE,   -- uk, ie, us
+  country_name TEXT NOT NULL,          -- United Kingdom, Ireland, United States
+  flag_emoji TEXT,                     -- 🇬🇧 🇮🇪 🇺🇸
+  sort_order INTEGER DEFAULT 0         -- homepage ordering
+);
+
 -- LOCATIONS
 CREATE TABLE IF NOT EXISTS locations (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  country_code TEXT NOT NULL,
+  country_code TEXT NOT NULL,          -- links to countries.country_code
   city_name TEXT NOT NULL,
   slug TEXT NOT NULL UNIQUE
 );
@@ -67,4 +76,5 @@ CREATE TABLE IF NOT EXISTS messages (
   FOREIGN KEY (receiver_id) REFERENCES users(id),
   FOREIGN KEY (ad_id) REFERENCES ads(id)
 );
+
 

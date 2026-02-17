@@ -1,0 +1,36 @@
+<%- include("../partials/breadcrumbs") %>
+
+<h1 class="text-2xl font-bold mb-6 flex items-center gap-2 text-pink-300 tracking-tight">
+  <span class="text-3xl"><%= flag %></span>
+  Cities in <%= countryName %>
+</h1>
+
+<ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+  <% cities.forEach(city => { %>
+    <li>
+      <a 
+        href="/<%= country %>/<%= city.slug %>"
+        class="
+          nookyup-hover
+          flex items-center gap-4 p-5 rounded-xl
+          bg-slate-900/30 border border-slate-800/50 backdrop-blur-xl
+          text-slate-200 font-medium
+
+          transition-all duration-500
+
+          hover:scale-[1.07]
+          hover:bg-gradient-to-r
+          hover:from-pink-600/30
+          hover:via-fuchsia-500/20
+          hover:to-purple-600/30
+          hover:shadow-[0_0_55px_rgba(236,72,153,0.8)]
+          hover:border-pink-500/80
+          hover:text-pink-200
+        "
+      >
+        <span class="text-lg tracking-wide"><%= city.city_name %></span>
+      </a>
+    </li>
+  <% }) %>
+</ul>
+
