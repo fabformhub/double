@@ -116,15 +116,29 @@ import adminRoutes from "./routes/admin.js";          // /admin
 import messagesRoutes from "./routes/messages.js";    // /messages
 import apiRoutes from "./routes/api.js";              // /api/*
 import adsBrowseRoutes from "./routes/adsBrowse.js";
+import pageRoutes from "./routes/pages.js";
+
+
+app.use((req, res, next) => {
+  const normalizedPath = req.path.replace(/\/$/, "") || "/";
+
+  res.locals.currentRoute = normalizedPath;
+  res.locals.user = req.user || null;
+
+  next();
+});
+
 
 
 // -----------------------------
 // SYSTEM ROUTES (STATIC)
 // -----------------------------
 app.use("/", authRoutes);          // /signup, /login, /logout
+app.use("/", pageRoutes);
 app.use("/dashboard", dashboardRoutes);
 app.use("/admin", adminRoutes);
 app.use("/messages", messagesRoutes);
+app.use("/", pageRoutes);
 
 
 // -----------------------------

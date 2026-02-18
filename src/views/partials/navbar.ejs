@@ -1,0 +1,157 @@
+<nav 
+  class="
+    sticky top-0 z-50
+    w-full fade-in
+    bg-slate-900/30 backdrop-blur-2xl 
+    border-b border-slate-800/50
+    shadow-[0_4px_30px_rgba(0,0,0,0.4)]
+  "
+>
+  <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+
+    <!-- Logo -->
+    <a href="/" class="group flex items-center select-none logo-wrapper">
+      <span class="text-3xl font-extrabold tracking-tight transition-all duration-500">
+        <span class="logo-nooky">Nooky</span><span class="logo-up">Up</span>
+      </span>
+    </a>
+
+    <!-- Desktop Nav -->
+    <div class="hidden md:flex items-center gap-6 text-lg font-medium text-slate-300">
+
+      <!-- HOME -->
+      <a 
+        href="/"
+        class="
+          px-4 py-2 rounded-full transition-all duration-300
+          hover:text-pink-300 hover:scale-[1.05]
+          <%= currentRoute === '/' ? 'active-pill' : '' %>
+        "
+      >
+        Home
+      </a>
+
+      <!-- ABOUT -->
+      <a 
+        href="/about"
+        class="
+          px-4 py-2 rounded-full transition-all duration-300
+          hover:text-pink-300 hover:scale-[1.05]
+          <%= currentRoute.startsWith('/about') ? 'active-pill' : '' %>
+        "
+      >
+        About
+      </a>
+
+      <!-- CONTACT -->
+      <a 
+        href="/contact"
+        class="
+          px-4 py-2 rounded-full transition-all duration-300
+          hover:text-pink-300 hover:scale-[1.05]
+          <%= currentRoute.startsWith('/contact') ? 'active-pill' : '' %>
+        "
+      >
+        Contact
+      </a>
+
+      <% if (!user) { %>
+
+        <!-- LOGIN -->
+        <a 
+          href="/login"
+          class="
+            px-4 py-2 rounded-full transition-all duration-300
+            hover:text-pink-300 hover:scale-[1.05]
+            <%= currentRoute.startsWith('/login') ? 'active-pill' : '' %>
+          "
+        >
+          Login
+        </a>
+
+        <!-- SIGNUP -->
+        <a 
+          href="/signup"
+          class="
+            px-4 py-2 rounded-full transition-all duration-300
+            hover:text-pink-300 hover:scale-[1.05]
+            <%= currentRoute.startsWith('/signup') ? 'active-pill' : '' %>
+          "
+        >
+          Sign Up
+        </a>
+
+      <% } else { %>
+
+        <!-- DASHBOARD -->
+        <a 
+          href="/dashboard"
+          class="
+            px-4 py-2 rounded-full transition-all duration-300
+            hover:text-pink-300 hover:scale-[1.05]
+            <%= currentRoute.startsWith('/dashboard') ? 'active-pill' : '' %>
+          "
+        >
+          Dashboard
+        </a>
+
+        <!-- LOGOUT -->
+        <a 
+          href="/logout"
+          class="
+            px-4 py-2 rounded-full transition-all duration-300
+            hover:text-pink-300 hover:scale-[1.05]
+          "
+        >
+          Logout
+        </a>
+
+      <% } %>
+
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button 
+      id="mobileMenuBtn" 
+      class="
+        md:hidden text-3xl text-slate-300 
+        transition-all duration-300 
+        hover:text-pink-400 hover:scale-[1.1]
+      "
+    >
+      ☰
+    </button>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div 
+    id="mobileMenu" 
+    class="
+      mobile-slide md:hidden px-6 pb-6 flex flex-col gap-4 text-lg font-medium 
+      text-slate-300 bg-slate-900/80 backdrop-blur-xl 
+      border-t border-slate-800/60
+    "
+  >
+    <a href="/" class="px-4 py-2 rounded-lg hover:text-pink-300 transition-all duration-300">Home</a>
+    <a href="/about" class="px-4 py-2 rounded-lg hover:text-pink-300 transition-all duration-300">About</a>
+    <a href="/contact" class="px-4 py-2 rounded-lg hover:text-pink-300 transition-all duration-300">Contact</a>
+
+    <% if (!user) { %>
+      <a href="/login" class="px-4 py-2 rounded-lg hover:text-pink-300 transition-all duration-300">Login</a>
+      <a href="/signup" class="px-4 py-2 rounded-lg hover:text-pink-300 transition-all duration-300">Sign Up</a>
+    <% } else { %>
+      <a href="/dashboard" class="px-4 py-2 rounded-lg hover:text-pink-300 transition-all duration-300">Dashboard</a>
+      <a href="/logout" class="px-4 py-2 rounded-lg hover:text-pink-300 transition-all duration-300">Logout</a>
+    <% } %>
+  </div>
+</nav>
+
+<script>
+  const btn = document.getElementById("mobileMenuBtn");
+  const menu = document.getElementById("mobileMenu");
+
+  btn?.addEventListener("click", () => {
+    menu.classList.toggle("open");
+  });
+</script>
+

@@ -1,7 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @layer utilities {
+  /* Generic shimmer hover */
   .nookyup-hover {
     position: relative;
     overflow: hidden;
@@ -27,19 +29,12 @@
   .nookyup-hover:hover::after {
     left: 150%;
   }
-}
 
-  /* Shared glow + pulse */
+  /* Shared logo wrapper */
   .logo-wrapper {
     display: inline-flex;
     gap: 0;
     letter-spacing: -0.5px;
-  }
-
-  .logo-wrapper:hover .logo-nooky,
-  .logo-wrapper:hover .logo-up {
-    filter: drop-shadow(0 0 14px rgba(236,72,153,0.9));
-    transform: translateY(-1px);
   }
 
   /* Nooky — seductive pink-magenta gradient */
@@ -62,15 +57,19 @@
   }
 
   /* Hover glow intensifies */
+  .logo-wrapper:hover .logo-nooky,
   .group:hover .logo-nooky {
     filter: drop-shadow(0 0 14px rgba(236,72,153,1));
+    transform: translateY(-1px);
   }
 
+  .logo-wrapper:hover .logo-up,
   .group:hover .logo-up {
     filter: drop-shadow(0 0 14px rgba(139,92,246,1));
+    transform: translateY(-1px);
   }
 
-/* Footer shimmer subtle effect */
+  /* Footer shimmer subtle effect */
   .footer-shimmer {
     position: relative;
     overflow: hidden;
@@ -120,3 +119,27 @@
     margin-left: 2px;
     filter: drop-shadow(0 0 6px rgba(139,92,246,0.5));
   }
+}
+.active-pill {
+  background: rgba(236, 72, 153, 0.18);
+  color: #f472b6 !important;
+  font-weight: 600;
+  border-radius: 9999px;
+  box-shadow: 0 0 12px rgba(236, 72, 153, 0.35);
+  backdrop-filter: blur(8px);
+}
+
+/* Mobile slide animation */
+.mobile-slide {
+  transition: max-height 0.4s ease, opacity 0.3s ease;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+}
+
+.mobile-slide.open {
+  max-height: 300px;
+  opacity: 1;
+}
+
+
