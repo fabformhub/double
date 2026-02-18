@@ -1,20 +1,10 @@
 <nav class="w-full border-b border-slate-800/60 bg-slate-900/40 backdrop-blur-xl shadow-lg shadow-black/20">
   <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
 
-    <!-- Brand (Upgraded Text Logo) -->
+    <!-- Brand (Two-Tone Premium Logo) -->
     <a href="/" class="group flex items-center">
-      <span 
-        class="
-          text-3xl font-extrabold tracking-tight 
-          text-pink-400 
-          drop-shadow-[0_0_10px_rgba(236,72,153,0.7)]
-          transition-all duration-500
-          group-hover:text-pink-300
-          group-hover:drop-shadow-[0_0_14px_rgba(236,72,153,0.9)]
-          logo-pulse logo-underline
-        "
-      >
-        nookyup
+      <span class="logo-wrapper text-3xl font-extrabold tracking-tight transition-all duration-500">
+        <span class="logo-nooky">Nooky</span><span class="logo-up">Up</span>
       </span>
     </a>
 
@@ -128,6 +118,7 @@
   </div>
 </nav>
 
+<!-- Mobile Menu Script -->
 <script>
   const btn = document.getElementById("mobileMenuBtn");
   const menu = document.getElementById("mobileMenu");
@@ -136,4 +127,43 @@
     menu.classList.toggle("hidden");
   });
 </script>
+
+<!-- Two-Tone Logo Styles -->
+<style>
+  .logo-wrapper {
+    display: inline-flex;
+    gap: 0;
+    letter-spacing: -0.5px;
+  }
+
+  /* Nooky — seductive pink-magenta gradient */
+  .logo-nooky {
+    background: linear-gradient(90deg, #ec4899, #f472b6);
+    -webkit-background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 10px rgba(236,72,153,0.7));
+    transition: all 0.5s ease;
+  }
+
+  /* Up — electric violet-blue gradient */
+  .logo-up {
+    background: linear-gradient(90deg, #8b5cf6, #6366f1);
+    -webkit-background-clip: text;
+    color: transparent;
+    margin-left: 2px;
+    filter: drop-shadow(0 0 10px rgba(139,92,246,0.7));
+    transition: all 0.5s ease;
+  }
+
+  /* Hover glow intensifies */
+  .group:hover .logo-nooky {
+    filter: drop-shadow(0 0 14px rgba(236,72,153,1));
+    transform: translateY(-1px);
+  }
+
+  .group:hover .logo-up {
+    filter: drop-shadow(0 0 14px rgba(139,92,246,1));
+    transform: translateY(-1px);
+  }
+</style>
 
