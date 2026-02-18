@@ -69,7 +69,7 @@ app.use((req, res, next) => {
 });
 
 // -----------------------------
-// USER INFO IN VIEWS
+// USER INFO IN VIEWS (email + userId)
 // -----------------------------
 app.use((req, res, next) => {
   res.locals.userId = req.session.userId || null;
@@ -97,6 +97,42 @@ app.use((req, res, next) => {
 });
 
 // -----------------------------
+// AUTO‑REDIRECT LOGGED‑IN USERS TO /dashboard
+// -----------------------------
+app.use((req, res, next) => {
+  const loggedIn = !!req.session.userId;
+
+  const publicPages = ["/", "/login", "/signup", "/about", "/contact"];
+
+  if (loggedIn && publicPages.includes(req.path)) {
+    return res.redirect("/dashboard");
+  }
+
+  next();
+});
+
+// -----------------------------
+// GLOBAL USER + CURRENT ROUTE (for navbar active pill)
+// -----------------------------
+app.use((req, res, next) => {
+  const normalizedPath = req.path.replace(/\/$/, "") || "/";
+
+  res.locals.currentRoute = normalizedPath;
+
+  if (!req.session.userId) {
+    res.locals.user = null;
+    return next();
+  }
+
+  const user = db
+    .prepare("SELECT id, email FROM users WHERE id = ?")
+    .get(req.session.userId);
+
+  res.locals.user = user || null;
+  next();
+});
+
+// -----------------------------
 // VIEW ENGINE + LAYOUTS
 // -----------------------------
 app.set("view engine", "ejs");
@@ -118,39 +154,19 @@ import apiRoutes from "./routes/api.js";              // /api/*
 import adsBrowseRoutes from "./routes/adsBrowse.js";
 import pageRoutes from "./routes/pages.js";
 
-
-app.use((req, res, next) => {
-  const normalizedPath = req.path.replace(/\/$/, "") || "/";
-
-  res.locals.currentRoute = normalizedPath;
-  res.locals.user = req.user || null;
-
-  next();
-});
-
-
-
-// -----------------------------
-// SYSTEM ROUTES (STATIC)
-// -----------------------------
-app.use("/", authRoutes);          // /signup, /login, /logout
+// SYSTEM ROUTES
+app.use("/", authRoutes);
 app.use("/", pageRoutes);
 app.use("/dashboard", dashboardRoutes);
 app.use("/admin", adminRoutes);
 app.use("/messages", messagesRoutes);
-app.use("/", pageRoutes);
-
+app.use("/", adsBrowseRoutes);
 
 // -----------------------------
 // API ROUTES
 // -----------------------------
 app.use("/api", apiRoutes);
 
-// -----------------------------
-// 
-// -----------------------------
-
-app.use("/", adsBrowseRoutes);
 // -----------------------------
 // 404 HANDLER
 // -----------------------------
