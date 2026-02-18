@@ -1,12 +1,28 @@
-<div class="max-w-4xl mx-auto py-20 px-6">
+<section class="pt-24 pb-20 text-center max-w-4xl mx-auto px-6">
 
-  <h1 class="text-5xl font-bold text-center mb-12 text-pink-300 tracking-tight">
-    Browse NookyUp
+  <!-- Hero Title -->
+  <h1 class="text-6xl font-extrabold tracking-tight text-pink-300 drop-shadow-[0_0_25px_rgba(236,72,153,0.35)] mb-6">
+    Fancy a Bit of Nooky?
   </h1>
 
-  <p class="text-center text-xl text-slate-400 mb-16">
-    Choose a country to begin exploring.
+  <!-- Hero Subtext -->
+  <p class="text-xl text-slate-400 leading-relaxed max-w-2xl mx-auto mb-8">
+    Welcome to <span class="text-pink-300 font-semibold">NookyUp</span> — the cheeky, 
+    tongue‑in‑cheek personal ads playground for grown‑ups who know exactly what they’re after.
+    A little flirty, a little bold, and just the right amount of 
+    <span class="italic">“wink wink, nudge nudge.”</span>
   </p>
+
+  <p class="text-lg text-slate-400 mb-16">
+    Pick your country <span class="font-semibold text-pink-300">and city</span> to begin your…  
+    let’s call it “browsing for like‑minded company.”
+  </p>
+
+</section>
+
+
+<!-- Country Grid -->
+<div class="max-w-4xl mx-auto pb-20 px-6">
 
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-10">
 
@@ -35,6 +51,18 @@
           <span><%= c.flag_emoji %></span>
           <span><%= c.country_name %></span>
         </h2>
+
+        <!-- Country-specific cheeky tagline -->
+        <p class="text-slate-400 mt-3 text-sm italic">
+          <% if (c.country_code === 'IE') { %>
+            Ireland: Where the craic is mighty and the nooky’s not far behind.
+          <% } else if (c.country_code === 'GB' || c.country_code === 'UK') { %>
+            The UK: Where even the nooky queues politely.
+          <% } else { %>
+            Looking for a bit of nooky in <%= c.country_name %>? Go on then…
+          <% } %>
+        </p>
+
       </a>
     <% }) %>
 
