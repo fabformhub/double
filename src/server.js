@@ -153,11 +153,11 @@ import messagesRoutes from "./routes/messages.js";    // /messages
 import apiRoutes from "./routes/api.js";              // /api/*
 import adsBrowseRoutes from "./routes/adsBrowse.js";
 import pageRoutes from "./routes/pages.js";
-import paymentRoutes from "./routes/paymentRoutes.js";
+// import paymentRoutes from "./routes/paymentRoutes.js";
 
 // SYSTEM ROUTES
 
-app.use("/", paymentRoutes);
+// app.use("/", paymentRoutes);
 app.use("/", authRoutes);
 app.use("/", pageRoutes);
 app.use("/dashboard", dashboardRoutes);
